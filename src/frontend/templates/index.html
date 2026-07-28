@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireLoop HR Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <main class="dashboard">
+        <header>
+            <h1>HireLoop</h1>
+            <p>AI Recruitment Orchestrator</p>
+        </header>
+
+        <section class="card launch-card">
+            <h2>Start Hiring Pipeline</h2>
+            <p class="subtitle">Enter a role and the AI agent graph will handle the rest.</p>
+            
+            <form id="start-form" method="POST" action="{{ url_for('index') }}">
+                <div class="input-group">
+                    <label for="role">Job Role</label>
+                    <input type="text" id="role" name="role" placeholder="e.g. Senior Python Engineer" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="experience">Experience Required</label>
+                    <input type="text" id="experience" name="experience" placeholder="e.g. 5+ years" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="salary">Salary Range</label>
+                    <input type="text" id="salary" name="salary" placeholder="e.g. $150k - $180k" required autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="location" placeholder="e.g. Remote, US" required autocomplete="off">
+                </div>
+                <button type="submit" id="start-btn">
+                    <span class="btn-text">Initialize Graph</span>
+                    <span class="loader hidden"></span>
+                </button>
+            </form>
+        </section>
+    </main>
+    <script>
+        document.getElementById('start-form').addEventListener('submit', function() {
+            document.querySelector('.btn-text').classList.add('hidden');
+            document.querySelector('.loader').classList.remove('hidden');
+            document.getElementById('start-btn').disabled = true;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HireLoop Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <main class="dashboard" style="max-width: 900px; padding-top: 2rem;">
+        <!-- Timeline Section -->
+        <section class="card timeline-card" style="margin-bottom: 2rem; padding: 1rem 2rem;">
+            <div class="timeline-container compact-timeline">
+                <div class="timeline-step" id="step-init">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Initialize</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-jd">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">JD Generation</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-post">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">LinkedIn Post</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-apps">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">App Collection</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Section -->
+        <section class="card" id="dynamic-content">
+            <h2 id="current-status-title">Current Status: Polling...</h2>
+            
+            <div class="loader" id="status-loader" style="margin: 2rem auto; width: 40px; height: 40px;"></div>
+
+            <!-- JD Approval Block -->
+            <div id="jd-approval-block" class="approval-block highlight-block hidden" style="margin-top: 1.5rem;">
+                <h3 class="highlight-title">Review Job Description</h3>
+                <p class="subtitle" style="margin-bottom: 1rem;">The AI has generated a Job Description. Edit it and approve to proceed.</p>
+                <textarea id="jd-content" rows="18" style="width: 100%; padding: 1.5rem; border-radius: 8px; background: rgba(0,0,0,0.4); border: 2px solid var(--primary); color: var(--text-primary); margin-bottom: 1.5rem; font-family: monospace; font-size: 1.05rem; box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);"></textarea>
+                <button id="approve-jd-btn" class="primary-btn highlight-btn" style="font-size: 1.2rem; padding: 1.2rem;">Approve JD</button>
+            </div>
+            
+            <!-- LinkedIn Post Approval Block -->
+            <div id="post-approval-block" class="approval-block hidden" style="margin-top: 1.5rem;">
+                <h3>Review LinkedIn Post</h3>
+                <p class="subtitle" style="margin-bottom: 1rem;">The AI has drafted a LinkedIn post. Edit it and approve to proceed.</p>
+                <textarea id="post-content" rows="10" style="width: 100%; padding: 1rem; border-radius: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); color: var(--text-primary); margin-bottom: 1rem; font-family: monospace;"></textarea>
+                <button id="approve-post-btn" class="primary-btn">Approve & Post</button>
+            </div>
+
+            <!-- Shortlist Approval Block -->
+            <div id="shortlist-approval-block" class="approval-block hidden" style="margin-top: 1.5rem;">
+                <h3>Review Shortlisted Candidates</h3>
+                <p class="subtitle" style="margin-bottom: 1rem;">The AI has screened the resumes and selected the top candidates. Approve to schedule interviews.</p>
+                <div id="shortlist-content" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: monospace; margin-bottom: 1rem; font-size: 1.1rem; line-height: 1.5;"></div>
+                <button id="approve-shortlist-btn" class="primary-btn highlight-btn">Approve Shortlist</button>
+            </div>
+
+            <!-- Final Results Approval Block -->
+            <div id="results-approval-block" class="approval-block hidden" style="margin-top: 1.5rem;">
+                <h3>Review Final Outcomes</h3>
+                <p class="subtitle" style="margin-bottom: 1rem;">Interviews are complete! The AI has drafted final offer/rejection decisions. Approve to send emails.</p>
+                <div id="results-content" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: monospace; margin-bottom: 1rem; font-size: 1.1rem; line-height: 1.5;"></div>
+                <button id="approve-results-btn" class="primary-btn highlight-btn">Approve & Send Emails</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const THREAD_ID = "{{ thread_id }}";
+        
+        const loader = document.getElementById('status-loader');
+        const statusTitle = document.getElementById('current-status-title');
+        
+        const jdBlock = document.getElementById('jd-approval-block');
+        const jdContent = document.getElementById('jd-content');
+        const jdBtn = document.getElementById('approve-jd-btn');
+        
+        const postBlock = document.getElementById('post-approval-block');
+        const postContent = document.getElementById('post-content');
+        const postBtn = document.getElementById('approve-post-btn');
+
+        function updateTimeline(activeStep) {
+            const steps = ['init', 'jd', 'post', 'apps'];
+            let reachedActive = false;
+            
+            steps.forEach(step => {
+                const el = document.getElementById(`step-${step}`);
+                if (step === activeStep) {
+                    el.classList.add('active');
+                    el.classList.remove('completed');
+                    reachedActive = true;
+                } else if (!reachedActive) {
+                    el.classList.add('completed');
+                    el.classList.remove('active');
+                } else {
+                    el.classList.remove('completed');
+                    el.classList.remove('active');
+                }
+            });
+        }
+
+        async function pollStatus() {
+            try {
+                const res = await fetch(`/api/status/${THREAD_ID}`);
+                const data = await res.json();
+                
+                let pendingAction = null;
+                let interruptData = null;
+                
+                if (data.tasks && data.tasks.length > 0) {
+                    for (const task of data.tasks) {
+                        for (const interrupt of task) {
+                            if (interrupt && interrupt.value && interrupt.value.action) {
+                                pendingAction = interrupt.value.action;
+                                interruptData = interrupt.value;
+                            }
+                        }
+                    }
+                }
+                
+                if (pendingAction === 'approve_jd') {
+                    loader.classList.add('hidden');
+                    statusTitle.textContent = "Action Required: Approve Job Description";
+                    updateTimeline('jd');
+                    
+                    jdBlock.classList.remove('hidden');
+                    postBlock.classList.add('hidden');
+                    
+                    let jdText = interruptData.jd;
+                    if (Array.isArray(jdText)) jdText = jdText.map(b => b.text).join('\n');
+                    jdContent.value = jdText || '';
+                } 
+                else if (pendingAction === 'approve_post') {
+                    loader.classList.add('hidden');
+                    statusTitle.textContent = "Action Required: Approve LinkedIn Post";
+                    updateTimeline('post');
+                    
+                    postBlock.classList.remove('hidden');
+                    jdBlock.classList.add('hidden');
+                    
+                    let postText = interruptData.post;
+                    if (Array.isArray(postText)) postText = postText.map(b => b.text).join('\n');
+                    postContent.value = postText || '';
+                }
+                else if (pendingAction === 'wait_7_days') {
+                    loader.classList.add('hidden');
+                    statusTitle.innerHTML = "✨ <b>Woohoo! Your post is live!</b> ✨<br><br><span style='font-size: 1.1rem; font-weight: 300; opacity: 0.9;'>Grab a coffee ☕ while we wait 7 days for awesome candidates to apply...</span>";
+                    updateTimeline('apps');
+                    
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.add('hidden');
+                    
+                    // Artificial wait of 5 seconds to simulate 7 days
+                    setTimeout(async () => {
+                        try {
+                            await fetch(`/api/resume/${THREAD_ID}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    action: 'wait_7_days',
+                                    data: { waited: true }
+                                })
+                            });
+                        } catch(e) {}
+                    }, 5000);
+                }
+                else if (pendingAction === 'approve_shortlist') {
+                    loader.classList.add('hidden');
+                    statusTitle.textContent = "Action Required: Approve Shortlist";
+                    updateTimeline('apps');
+                    
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.remove('hidden');
+                    
+                    let candHTML = (interruptData.shortlisted || []).map(c => `<b>${c.name}</b> &nbsp;&nbsp;|&nbsp;&nbsp; Score: <span style="color:var(--primary)">${c.score}/100</span> &nbsp;&nbsp;|&nbsp;&nbsp; Slot: ${c.interview_slot}`).join('<br>');
+                    document.getElementById('shortlist-content').innerHTML = candHTML;
+                }
+                else if (pendingAction === 'wait_interviews') {
+                    loader.classList.add('hidden');
+                    statusTitle.innerHTML = "📅 <b>Interviews are happening!</b> 📅<br><br><span style='font-size: 1.1rem; font-weight: 300; opacity: 0.9;'>Simulating the interview process...</span>";
+                    updateTimeline('apps');
+                    
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.add('hidden');
+                    
+                    // Artificial wait of 5 seconds
+                    setTimeout(async () => {
+                        try {
+                            await fetch(`/api/resume/${THREAD_ID}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ action: 'wait_interviews', data: { waited: true } })
+                            });
+                        } catch(e) {}
+                    }, 5000);
+                }
+                else if (pendingAction === 'approve_results') {
+                    loader.classList.add('hidden');
+                    statusTitle.textContent = "Action Required: Approve Final Results";
+                    updateTimeline('apps');
+                    
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.remove('hidden');
+                    
+                    let outHTML = (interruptData.draft_outcomes || []).map(c => `<b>${c.name}</b>: <span style="color:${c.outcome === 'Offer' ? '#10b981' : '#ef4444'}">${c.outcome}</span>`).join('<br>');
+                    document.getElementById('results-content').innerHTML = outHTML;
+                }
+                else {
+                    // No pending interrupts. Still processing or finished.
+                    loader.classList.remove('hidden');
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.add('hidden');
+                    
+                    let dbStatus = data.values && data.values.status ? data.values.status : 'PROCESSING';
+                    statusTitle.textContent = `Status: ${dbStatus}`;
+                    
+                    if (dbStatus.includes('JD')) updateTimeline('jd');
+                    else if (dbStatus.includes('POST')) updateTimeline('post');
+                    else updateTimeline('apps');
+                    
+                    // Poll again in 3 seconds
+                    setTimeout(pollStatus, 3000);
+                }
+            } catch (err) {
+                console.error(err);
+                statusTitle.textContent = "Error fetching status";
+                setTimeout(pollStatus, 5000);
+            }
+        }
+
+        jdBtn.addEventListener('click', async () => {
+            jdBtn.disabled = true;
+            jdBtn.textContent = 'Approving...';
+            
+            try {
+                await fetch(`/api/resume/${THREAD_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'approve_jd',
+                        data: { jd_approved: true, jd: jdContent.value }
+                    })
+                });
+                
+                // Hide block and start polling again
+                jdBlock.classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTitle.textContent = "Status: Processing next steps...";
+                setTimeout(pollStatus, 2000);
+            } catch(e) {
+                alert('Error approving JD');
+            } finally {
+                jdBtn.disabled = false;
+                jdBtn.textContent = 'Approve JD';
+            }
+        });
+        
+        postBtn.addEventListener('click', async () => {
+            postBtn.disabled = true;
+            postBtn.textContent = 'Posting...';
+            
+            try {
+                await fetch(`/api/resume/${THREAD_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'approve_post',
+                        data: { post_approved: true, post: postContent.value }
+                    })
+                });
+                
+                postBlock.classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTitle.textContent = "Status: Processing next steps...";
+                setTimeout(pollStatus, 2000);
+            } catch(e) {
+                alert('Error approving Post');
+            } finally {
+                postBtn.disabled = false;
+                postBtn.textContent = 'Approve & Post';
+            }
+        });
+
+        document.getElementById('approve-shortlist-btn').addEventListener('click', async (e) => {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = 'Approving...';
+            
+            try {
+                await fetch(`/api/resume/${THREAD_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'approve_shortlist',
+                        data: { shortlist_approved: true }
+                    })
+                });
+                
+                document.getElementById('shortlist-approval-block').classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTitle.textContent = "Status: Scheduling interviews...";
+                setTimeout(pollStatus, 2000);
+            } catch(err) {
+                alert('Error approving shortlist');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Approve Shortlist';
+            }
+        });
+
+        document.getElementById('approve-results-btn').addEventListener('click', async (e) => {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            try {
+                await fetch(`/api/resume/${THREAD_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'approve_results',
+                        data: { final_results_approved: true }
+                    })
+                });
+                
+                document.getElementById('results-approval-block').classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTitle.textContent = "Status: Sending emails...";
+                setTimeout(pollStatus, 2000);
+            } catch(err) {
+                alert('Error approving results');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Approve & Send Emails';
+            }
+        });
+
+        // Start polling initially
+        pollStatus();
+    </script>
+</body>
+</html>

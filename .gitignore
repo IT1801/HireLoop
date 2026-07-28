@@ -1,0 +1,12 @@
+# Environments and Secrets
+.env
+.venv
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.egg-info
+
+# Database
+hireloop.sqlite
+*.db
