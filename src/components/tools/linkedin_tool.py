@@ -1,7 +1,8 @@
 import requests
 from src.components.core.config import settings
 from src.components.core.logger import logger
-from src.components.core.exception import LinkedInAPIError
+from src.components.core.exception import LinkedInAPIError, CustomException
+import sys
 
 def post_job_to_linkedin(role: str, jd: str) -> str:
     """
@@ -36,8 +37,8 @@ def post_job_to_linkedin(role: str, jd: str) -> str:
             author_urn = f"urn:li:person:{data.get('id')}" if 'id' in data else f"urn:li:person:{data.get('sub')}"
             logger.info(f"Successfully fetched Personal LinkedIn URN: {author_urn}")
         except Exception as e:
-            logger.error(f"Failed to fetch LinkedIn profile URN. Ensure token has profile/r_liteprofile scope: {e}")
-            raise LinkedInAPIError(f"Failed to get LinkedIn User URN (Check your token scopes!): {e}")
+            logger.error(f"Failed to fetch LinkedIn profile URN. Ensure token has profile/r_liteprofile scope: {CustomException(e, sys)}")
+            raise LinkedInAPIError(f"Failed to get LinkedIn User URN (Check your token scopes!): {e}", sys)
 
     # 2. Post the content using UGC API
     ugc_url = "https://api.linkedin.com/v2/ugcPosts"
@@ -68,7 +69,7 @@ def post_job_to_linkedin(role: str, jd: str) -> str:
         logger.info(f"Successfully posted to LinkedIn! Post ID: {post_id}")
         return post_id
     except Exception as e:
-        logger.error(f"Failed to post to LinkedIn: {e}")
+        logger.error(f"Failed to post to LinkedIn: {CustomException(e, sys)}")
         if hasattr(e, 'response') and e.response:
             logger.error(f"Response: {e.response.text}")
-        raise LinkedInAPIError(f"LinkedIn API failed: {e}")
+        raise LinkedInAPIError(f"LinkedIn API failed: {e}", sys)

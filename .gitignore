@@ -10,3 +10,6 @@ __pycache__/
 # Database
 hireloop.sqlite
 *.db
+
+# Logs
+logs

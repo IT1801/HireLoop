@@ -4,6 +4,8 @@ from src.components.graphs.state import HireLoopState
 from src.components.prompts.resume_scorer import RESUME_SCORER_PROMPT
 from src.components.core.logger import logger
 from src.components.core.config import settings
+from src.components.core.exception import CustomException
+import sys
 
 def resume_screener(state: HireLoopState) -> HireLoopState:
     """
@@ -41,7 +43,7 @@ def resume_screener(state: HireLoopState) -> HireLoopState:
             logger.info(f"{app['name']} scored {app['score']} - {app['decision']}")
             
         except Exception as e:
-            logger.error(f"Error scoring {app['name']}: {e}")
+            logger.error(f"Error scoring {app['name']}: {CustomException(e, sys)}")
             app["score"] = 0
             app["decision"] = "reject"
             

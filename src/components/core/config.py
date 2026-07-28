@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     LINKEDIN_ORGANIZATION_ID: Optional[str] = None
     SENDGRID_API_KEY: Optional[str] = None
     
+    # LangSmith Observability
+    LANGCHAIN_TRACING_V2: str = "true"
+    LANGCHAIN_API_KEY: Optional[str] = None
+    LANGCHAIN_PROJECT: str = "HireLoop"
+    
     # DB
     DB_PATH: str = "hireloop.sqlite"
     

@@ -3,6 +3,8 @@ from src.components.graphs.state import HireLoopState
 from src.components.tools.linkedin_tool import post_job_to_linkedin
 from src.components.core.logger import logger
 from src.components.core.config import settings
+from src.components.core.exception import CustomException
+import sys
 from langgraph.types import interrupt
 
 def generate_post_node(state: HireLoopState) -> HireLoopState:
@@ -34,7 +36,7 @@ def generate_post_node(state: HireLoopState) -> HireLoopState:
             if isinstance(post_content, list):
                 post_content = "".join([block.get("text", "") if isinstance(block, dict) else str(block) for block in post_content])
         except Exception as e:
-            logger.error(f"LLM Error, falling back to mock Post: {str(e)}")
+            logger.error(f"LLM Error, falling back to mock Post: {CustomException(e, sys)}")
             post_content = f"We are hiring a {state['role']}!\n\nApply now if you have experience and want to work with an amazing team. #Hiring #{state['role'].replace(' ', '')}"
             
         state["linkedin_post"] = post_content.strip()

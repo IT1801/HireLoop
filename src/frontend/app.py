@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 import requests
 import os
+import sys
+from src.components.core.logger import logger
+from src.components.core.exception import CustomException
 
 app = Flask(__name__)
 
@@ -28,6 +31,7 @@ def index():
             thread_id = data.get("thread_id")
             return redirect(url_for("dashboard", thread_id=thread_id))
         except Exception as e:
+            logger.error(f"Error communicating with backend: {CustomException(e, sys)}")
             return f"Error communicating with backend: {str(e)}", 500
             
     return render_template("index.html")
@@ -43,6 +47,7 @@ def api_status(thread_id):
         resp = requests.get(f"{BACKEND_URL}/status/{thread_id}")
         return jsonify(resp.json()), resp.status_code
     except Exception as e:
+        logger.error(f"Error fetching status for thread {thread_id}: {CustomException(e, sys)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/resume/<thread_id>", methods=["POST"])
@@ -52,6 +57,7 @@ def api_resume(thread_id):
         resp = requests.post(f"{BACKEND_URL}/resume/{thread_id}", json=request.json)
         return jsonify(resp.json()), resp.status_code
     except Exception as e:
+        logger.error(f"Error resuming thread {thread_id}: {CustomException(e, sys)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":

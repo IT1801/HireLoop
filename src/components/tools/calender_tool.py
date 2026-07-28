@@ -1,6 +1,7 @@
 import datetime
 from src.components.core.logger import logger
-from src.components.core.exception import CalendarAPIError
+from src.components.core.exception import CalendarAPIError, CustomException
+import sys
 
 def find_available_slots() -> list[str]:
     """
@@ -19,7 +20,8 @@ def find_available_slots() -> list[str]:
         
         return [slot1, slot2]
     except Exception as e:
-        raise CalendarAPIError(f"Failed to fetch slots: {e}")
+        logger.error(f"Failed to fetch slots: {CustomException(e, sys)}")
+        raise CalendarAPIError(f"Failed to fetch slots: {e}", sys)
 
 def schedule_interview(candidate_email: str, slot: str) -> bool:
     """
@@ -30,4 +32,6 @@ def schedule_interview(candidate_email: str, slot: str) -> bool:
         # Placeholder for calendar event creation
         return True
     except Exception as e:
-        raise CalendarAPIError(f"Failed to schedule interview: {e}")
+        logger.error(f"Failed to schedule interview: {CustomException(e, sys)}")
+        raise CalendarAPIError(f"Failed to schedule interview: {e}", sys)
+

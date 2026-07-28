@@ -2,7 +2,8 @@ import smtplib
 from email.message import EmailMessage
 from src.components.core.config import settings
 from src.components.core.logger import logger
-from src.components.core.exception import EmailAPIError
+from src.components.core.exception import EmailAPIError, CustomException
+import sys
 
 def send_email(to_email: str, subject: str, body: str) -> bool:
     """
@@ -31,5 +32,5 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         logger.info(f"Successfully sent email to {to_email}")
         return True
     except Exception as e:
-        logger.error(f"Failed to send email to {to_email}: {e}")
-        raise EmailAPIError(f"Email sending failed: {e}")
+        logger.error(f"Failed to send email to {to_email}: {CustomException(e, sys)}")
+        raise EmailAPIError(f"Email sending failed: {e}", sys)

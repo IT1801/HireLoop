@@ -3,6 +3,8 @@ from src.components.graphs.state import HireLoopState
 from src.components.prompts.jd_creator import JD_GENERATION_PROMPT
 from src.components.core.logger import logger
 from src.components.core.config import settings
+from src.components.core.exception import CustomException
+import sys
 from langgraph.types import interrupt
 
 def generate_jd_node(state: HireLoopState) -> HireLoopState:
@@ -27,7 +29,7 @@ def generate_jd_node(state: HireLoopState) -> HireLoopState:
         })
         jd = response.content
     except Exception as e:
-        logger.error(f"LLM Error, falling back to mock JD: {str(e)}")
+        logger.error(f"LLM Error, falling back to mock JD: {CustomException(e, sys)}")
         jd = f"**[Fallback JD due to API Quota]**\n\nRole: {role}\nExperience: {experience}\nLocation: {location}\n\nThis is a fallback job description because the Google Gemini API free-tier quota was exhausted."
     
     logger.info("JD generated successfully.")
