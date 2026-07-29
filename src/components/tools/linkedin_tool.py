@@ -4,14 +4,17 @@ from src.components.core.logger import logger
 from src.components.core.exception import LinkedInAPIError, CustomException
 import sys
 
-def post_job_to_linkedin(role: str, jd: str) -> str:
+def post_job_to_linkedin(role: str, jd: str, company_id: str) -> str:
     """
     Post a job to LinkedIn using their UGC Posts API.
     Returns the Job Posting ID or URL.
     """
-    token = settings.LINKEDIN_ACCESS_TOKEN
+    from src.components.core.tenant_utils import get_company_credentials
+    creds = get_company_credentials(company_id)
+    token = creds.get("linkedin_access_token")
+    
     if not token:
-        logger.warning("LINKEDIN_ACCESS_TOKEN not set. Simulating job post.")
+        logger.warning("LINKEDIN_ACCESS_TOKEN not set for this company. Simulating job post.")
         return f"mock_linkedin_job_id_for_{role.replace(' ', '_')}"
         
     headers = {
@@ -22,8 +25,9 @@ def post_job_to_linkedin(role: str, jd: str) -> str:
     
     # 1. Determine the Author URN
     author_urn = None
-    if settings.LINKEDIN_ORGANIZATION_ID:
-        author_urn = f"urn:li:organization:{settings.LINKEDIN_ORGANIZATION_ID}"
+    org_id = creds.get("linkedin_org_id")
+    if org_id:
+        author_urn = f"urn:li:organization:{org_id}"
         logger.info(f"Using Organization URN: {author_urn}")
     else:
         # Fallback to fetching personal profile URN

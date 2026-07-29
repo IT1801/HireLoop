@@ -10,12 +10,20 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <!-- Top Right Back Button -->
+    <div style="position: absolute; top: 1.5rem; right: 2rem; z-index: 100;">
+        <a href="{{ url_for('index') }}" style="color: var(--primary, #6366f1); text-decoration: none; font-weight: 600; font-size: 1.05rem; padding: 0.5rem 1.2rem; border: 1px solid var(--border-subtle, rgba(255,255,255,0.2)); border-radius: 6px; background: rgba(0,0,0,0.3); backdrop-filter: blur(8px); transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 0.5rem;">
+            &larr; Back to Home
+        </a>
+    </div>
+
     <div class="background-blobs">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
     </div>
 
     <main class="dashboard" style="max-width: 900px; padding-top: 2rem;">
+
         <!-- Timeline Section -->
         <section class="card timeline-card" style="margin-bottom: 2rem; padding: 1rem 2rem;">
             <div class="timeline-container compact-timeline">
@@ -40,6 +48,24 @@
                 <div class="timeline-step" id="step-apps">
                     <div class="step-circle">4</div>
                     <div class="step-label">App Collection</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-screen">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Resume Screening</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-schedule">
+                    <div class="step-circle">6</div>
+                    <div class="step-label">Email Scheduling</div>
+                </div>
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-step" id="step-decision">
+                    <div class="step-circle">7</div>
+                    <div class="step-label">Final Decision</div>
                 </div>
             </div>
         </section>
@@ -74,6 +100,14 @@
                 <button id="approve-shortlist-btn" class="primary-btn highlight-btn">Approve Shortlist</button>
             </div>
 
+            <!-- Schedule Email Approval Block -->
+            <div id="schedule-email-approval-block" class="approval-block hidden" style="margin-top: 1.5rem;">
+                <h3>Review Interview Invite Emails</h3>
+                <p class="subtitle" style="margin-bottom: 1rem;">The AI has drafted personalized invite emails. Edit them and approve to send.</p>
+                <div id="schedule-email-content" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;"></div>
+                <button id="approve-schedule-email-btn" class="primary-btn highlight-btn">Approve & Send Invites</button>
+            </div>
+
             <!-- Final Results Approval Block -->
             <div id="results-approval-block" class="approval-block hidden" style="margin-top: 1.5rem;">
                 <h3>Review Final Outcomes</h3>
@@ -99,7 +133,7 @@
         const postBtn = document.getElementById('approve-post-btn');
 
         function updateTimeline(activeStep) {
-            const steps = ['init', 'jd', 'post', 'apps'];
+            const steps = ['init', 'jd', 'post', 'apps', 'screen', 'schedule', 'decision'];
             let reachedActive = false;
             
             steps.forEach(step => {
@@ -123,19 +157,8 @@
                 const res = await fetch(`/api/status/${THREAD_ID}`);
                 const data = await res.json();
                 
-                let pendingAction = null;
-                let interruptData = null;
-                
-                if (data.tasks && data.tasks.length > 0) {
-                    for (const task of data.tasks) {
-                        for (const interrupt of task) {
-                            if (interrupt && interrupt.value && interrupt.value.action) {
-                                pendingAction = interrupt.value.action;
-                                interruptData = interrupt.value;
-                            }
-                        }
-                    }
-                }
+                let pendingAction = data.required_action;
+                let interruptData = data.action_data;
                 
                 if (pendingAction === 'approve_jd') {
                     loader.classList.add('hidden');
@@ -183,12 +206,13 @@
                                 })
                             });
                         } catch(e) {}
+                        setTimeout(pollStatus, 2000);
                     }, 5000);
                 }
                 else if (pendingAction === 'approve_shortlist') {
                     loader.classList.add('hidden');
                     statusTitle.textContent = "Action Required: Approve Shortlist";
-                    updateTimeline('apps');
+                    updateTimeline('screen');
                     
                     jdBlock.classList.add('hidden');
                     postBlock.classList.add('hidden');
@@ -201,7 +225,7 @@
                 else if (pendingAction === 'wait_interviews') {
                     loader.classList.add('hidden');
                     statusTitle.innerHTML = "📅 <b>Interviews are happening!</b> 📅<br><br><span style='font-size: 1.1rem; font-weight: 300; opacity: 0.9;'>Simulating the interview process...</span>";
-                    updateTimeline('apps');
+                    updateTimeline('schedule');
                     
                     jdBlock.classList.add('hidden');
                     postBlock.classList.add('hidden');
@@ -217,19 +241,55 @@
                                 body: JSON.stringify({ action: 'wait_interviews', data: { waited: true } })
                             });
                         } catch(e) {}
+                        setTimeout(pollStatus, 2000);
                     }, 5000);
                 }
-                else if (pendingAction === 'approve_results') {
+                else if (pendingAction === 'approve_schedule_emails') {
                     loader.classList.add('hidden');
-                    statusTitle.textContent = "Action Required: Approve Final Results";
-                    updateTimeline('apps');
+                    statusTitle.textContent = "Action Required: Approve Interview Invites";
+                    updateTimeline('schedule');
                     
                     jdBlock.classList.add('hidden');
                     postBlock.classList.add('hidden');
                     document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    document.getElementById('results-approval-block').classList.add('hidden');
+                    document.getElementById('schedule-email-approval-block').classList.remove('hidden');
+                    
+                    let draftsHTML = (interruptData.drafts || []).map(d => `
+                        <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px;">
+                            <div style="font-weight: bold; margin-bottom: 0.5rem; color: var(--primary);">${d.name}</div>
+                            <textarea id="draft-${d.id}" rows="5" style="width: 100%; padding: 0.5rem; background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); color: var(--text-primary); font-family: monospace; border-radius: 4px;">${d.draft}</textarea>
+                        </div>
+                    `).join('');
+                    document.getElementById('schedule-email-content').innerHTML = draftsHTML;
+                }
+                else if (pendingAction === 'approve_results') {
+                    loader.classList.add('hidden');
+                    statusTitle.textContent = "Action Required: Approve Final Results";
+                    updateTimeline('decision');
+                    
+                    jdBlock.classList.add('hidden');
+                    postBlock.classList.add('hidden');
+                    document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    if (document.getElementById('schedule-email-approval-block')) document.getElementById('schedule-email-approval-block').classList.add('hidden');
                     document.getElementById('results-approval-block').classList.remove('hidden');
                     
-                    let outHTML = (interruptData.draft_outcomes || []).map(c => `<b>${c.name}</b>: <span style="color:${c.outcome === 'Offer' ? '#10b981' : '#ef4444'}">${c.outcome}</span>`).join('<br>');
+                    let outHTML = '';
+                    if (data.values && data.values.applications) {
+                        outHTML = data.values.applications.map(c => {
+                            let outcome = (interruptData.draft_outcomes || {})[c.id] || 'reject';
+                            let isOffer = outcome === 'accept';
+                            return `
+                                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 0.8rem; margin-bottom: 0.5rem; border-radius: 6px;">
+                                    <span><b>${c.name}</b></span>
+                                    <select id="result-sel-${c.id}" style="background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-subtle); padding: 0.3rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                                        <option value="accept" ${isOffer ? 'selected' : ''}>Offer</option>
+                                        <option value="reject" ${!isOffer ? 'selected' : ''}>Reject</option>
+                                    </select>
+                                </div>
+                            `;
+                        }).join('');
+                    }
                     document.getElementById('results-content').innerHTML = outHTML;
                 }
                 else {
@@ -238,6 +298,7 @@
                     jdBlock.classList.add('hidden');
                     postBlock.classList.add('hidden');
                     document.getElementById('shortlist-approval-block').classList.add('hidden');
+                    if (document.getElementById('schedule-email-approval-block')) document.getElementById('schedule-email-approval-block').classList.add('hidden');
                     document.getElementById('results-approval-block').classList.add('hidden');
                     
                     let dbStatus = data.values && data.values.status ? data.values.status : 'PROCESSING';
@@ -245,7 +306,11 @@
                     
                     if (dbStatus.includes('JD')) updateTimeline('jd');
                     else if (dbStatus.includes('POST')) updateTimeline('post');
-                    else updateTimeline('apps');
+                    else if (dbStatus.includes('COLLECT')) updateTimeline('apps');
+                    else if (dbStatus.includes('SCREEN') || dbStatus.includes('SHORTLIST') || dbStatus.includes('NO_SHORTLIST')) updateTimeline('screen');
+                    else if (dbStatus.includes('INTERVIEW') || dbStatus.includes('WAITING_FOR_INTERVIEWS')) updateTimeline('schedule');
+                    else if (dbStatus.includes('RESULT') || dbStatus.includes('PIPELINE_COMPLETE')) updateTimeline('decision');
+                    else updateTimeline('init');
                     
                     // Poll again in 3 seconds
                     setTimeout(pollStatus, 3000);
@@ -337,10 +402,53 @@
             }
         });
 
+        document.getElementById('approve-schedule-email-btn').addEventListener('click', async (e) => {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            const drafts = [];
+            if (interruptData && interruptData.drafts) {
+                interruptData.drafts.forEach(d => {
+                    const txt = document.getElementById(`draft-${d.id}`);
+                    if (txt) {
+                        drafts.push({ id: d.id, name: d.name, draft: txt.value });
+                    }
+                });
+            }
+            
+            try {
+                await fetch(`/api/resume/${THREAD_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'approve_schedule_emails',
+                        data: { schedule_emails_approved: true, drafts: drafts }
+                    })
+                });
+                
+                document.getElementById('schedule-email-approval-block').classList.add('hidden');
+                loader.classList.remove('hidden');
+                statusTitle.textContent = "Status: Scheduling interviews...";
+                setTimeout(pollStatus, 2000);
+            } catch(err) {
+                alert('Error approving schedule emails');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Approve & Send Invites';
+            }
+        });
+
         document.getElementById('approve-results-btn').addEventListener('click', async (e) => {
             const btn = e.target;
             btn.disabled = true;
             btn.textContent = 'Sending...';
+            
+            const updatedOutcomes = {};
+            document.querySelectorAll('select[id^="result-sel-"]').forEach(sel => {
+                const appId = sel.id.replace('result-sel-', '');
+                updatedOutcomes[appId] = sel.value;
+            });
             
             try {
                 await fetch(`/api/resume/${THREAD_ID}`, {
@@ -348,7 +456,7 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'approve_results',
-                        data: { final_results_approved: true }
+                        data: { final_results_approved: true, draft_outcomes: updatedOutcomes }
                     })
                 });
                 

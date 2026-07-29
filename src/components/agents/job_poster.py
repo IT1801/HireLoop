@@ -27,6 +27,9 @@ def generate_post_node(state: HireLoopState) -> HireLoopState:
         {state['jd']}
         
         Keep it concise, use relevant hashtags, and encourage people to apply.
+        CRITICAL: You MUST include this exact application link at the bottom of the post: 
+        http://localhost:5000/apply/{state.get('job_id', 'unknown')}
+        
         Output ONLY the text of the post without markdown blocks."""
         
         try:
@@ -59,8 +62,13 @@ def approve_post_node(state: HireLoopState) -> HireLoopState:
         logger.warning("Post was not approved by HR.")
         return state
         
+    company_id = state.get("company_id")
+    if not company_id:
+        logger.error("No company_id found in state. Cannot fetch credentials.")
+        return state
+
     logger.info("Posting job to LinkedIn...")
-    posting_id = post_job_to_linkedin(state["role"], state["linkedin_post"])
+    posting_id = post_job_to_linkedin(state["role"], state["linkedin_post"], company_id)
     logger.info(f"Job posted with ID: {posting_id}")
     
     state["status"] = "POSTED_WAITING"
@@ -71,7 +79,8 @@ def wait_for_apps_node(state: HireLoopState) -> HireLoopState:
         return state
         
     state["days_waited"] = 0
-    interrupt({"action": "wait_7_days", "message": "Waiting for applications to roll in..."})
+    if not settings.FAST_FORWARD_WAITS:
+        interrupt({"action": "wait_7_days", "message": "Waiting for applications to roll in..."})
     
     state["days_waited"] += 7
     state["status"] = "COLLECTING_APPS"

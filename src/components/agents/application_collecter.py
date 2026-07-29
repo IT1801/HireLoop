@@ -8,54 +8,56 @@ def application_collector(state: HireLoopState) -> HireLoopState:
     """
     logger.info("Polling for incoming applications...")
     
-    # In a real app, this would read from Gmail/IMAP or an ATS API
-    # We will simulate receiving 4 applications for the role
-    mock_apps = [
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Alice Smith",
-            "email": "alice@example.com",
-            "resume_text": f"Experienced software engineer with 5 years of Python and React. Built scalable backends.",
-            "score": None,
-            "decision": None,
-            "interview_slot": None,
-            "outcome": None
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Bob Jones",
-            "email": "bob@example.com",
-            "resume_text": f"Recent grad, know some HTML and CSS. Looking for entry level.",
-            "score": None,
-            "decision": None,
-            "interview_slot": None,
-            "outcome": None
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Charlie Brown",
-            "email": "charlie@example.com",
-            "resume_text": f"Senior Data Scientist, expert in Machine Learning, LangChain, and generative AI.",
-            "score": None,
-            "decision": None,
-            "interview_slot": None,
-            "outcome": None
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Diana Prince",
-            "email": "diana@example.com",
-            "resume_text": f"Project manager with 10 years experience leading agile teams.",
-            "score": None,
-            "decision": None,
-            "interview_slot": None,
-            "outcome": None
-        }
-    ]
+    logger.info("Fetching real applications from database...")
     
-    state["applications"] = mock_apps
-    logger.info(f"Collected {len(mock_apps)} applications.")
+    from src.components.core.tenant_db import SessionLocal, Application
+    db = SessionLocal()
     
+    try:
+        job_id = state.get("job_id")
+        apps = db.query(Application).filter(Application.job_id == job_id).all()
+        
+        real_apps = []
+        for app in apps:
+            real_apps.append({
+                "id": app.id,
+                "name": app.name,
+                "email": app.email,
+                "resume_text": app.resume_text,
+                "score": app.ai_score,
+                "decision": None,
+                "interview_slot": app.interview_slot,
+                "outcome": None
+            })
+            
+        state["applications"] = real_apps
+        logger.info(f"Collected {len(real_apps)} applications from database.")
+    except Exception as e:
+        logger.error(f"Error fetching applications: {e}")
+        state["applications"] = []
+    finally:
+        db.close()
+        
+    from src.components.core.config import settings
+    if settings.FAST_FORWARD_WAITS and len(state["applications"]) < 3:
+        logger.info("FAST_FORWARD_WAITS is true and <3 apps found. Injecting mock applications...")
+        mock_resumes = [
+            "Highly experienced Machine Learning Engineer with 5 years of Python and TensorFlow experience. Delivered 3 NLP projects.",
+            "Recent CS Graduate with strong fundamentals in algorithms. Built a few computer vision side projects using PyTorch.",
+            "Data Scientist with a background in statistics. Strong R and SQL skills, looking to move into deep learning."
+        ]
+        for i, res in enumerate(mock_resumes):
+            state["applications"].append({
+                "id": f"mock_app_{i}",
+                "name": f"Mock Candidate {i+1}",
+                "email": f"candidate{i+1}@example.com",
+                "resume_text": res,
+                "score": None,
+                "decision": None,
+                "interview_slot": None,
+                "outcome": None
+            })
+
     # The edges.py logic will decide whether this is enough or if we need to regenerate the JD
     state["status"] = "APPLICATIONS_COLLECTED"
     return state

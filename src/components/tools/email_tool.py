@@ -1,18 +1,24 @@
-import smtplib
+import base64
+import requests
 from email.message import EmailMessage
 from src.components.core.config import settings
 from src.components.core.logger import logger
 from src.components.core.exception import EmailAPIError, CustomException
 import sys
 
-def send_email(to_email: str, subject: str, body: str) -> bool:
+def send_email(to_email: str, subject: str, body: str, company_id: str) -> bool:
     """
-    Send an email using SendGrid SMTP or generic SMTP.
-    Requires SMTP configuration or SendGrid API key.
+    Send an email using Google Workspace Gmail API.
+    Requires Google OAuth credentials.
     """
-    api_key = settings.SENDGRID_API_KEY
-    if not api_key:
-        logger.warning(f"SENDGRID_API_KEY not set. Simulating email to {to_email}")
+    from src.components.core.tenant_utils import get_company_credentials
+    creds = get_company_credentials(company_id)
+    google_creds = creds.get("google_credentials", {})
+    
+    access_token = google_creds.get("access_token") if isinstance(google_creds, dict) else None
+    
+    if not access_token:
+        logger.warning(f"Google Workspace not connected for this company. Simulating email to {to_email}")
         logger.info(f"Email Content:\nSubject: {subject}\n{body}")
         return True
         
@@ -20,17 +26,35 @@ def send_email(to_email: str, subject: str, body: str) -> bool:
         msg = EmailMessage()
         msg.set_content(body)
         msg['Subject'] = subject
-        msg['From'] = "hello@hireloop.com"
+        msg['From'] = "me"
         msg['To'] = to_email
 
-        # SendGrid standard SMTP setup
-        server = smtplib.SMTP('smtp.sendgrid.net', 587)
-        server.starttls()
-        server.login('apikey', api_key)
-        server.send_message(msg)
-        server.quit()
-        logger.info(f"Successfully sent email to {to_email}")
+        raw_msg = base64.urlsafe_b64encode(msg.as_bytes()).decode()
+
+        headers = {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
+        
+        payload = {
+            "raw": raw_msg
+        }
+
+        # Gmail API to send email
+        url = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send"
+        response = requests.post(url, headers=headers, json=payload, timeout=10)
+        
+        response.raise_for_status()
+        
+        logger.info(f"Successfully sent email to {to_email} via Gmail API")
         return True
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Failed to send email to {to_email} via Gmail API: {CustomException(e, sys)}")
+        if e.response is not None:
+            logger.error(f"Response: {e.response.text}")
+        logger.warning(f"Email failed to send, but proceeding anyway.")
+        return False
     except Exception as e:
-        logger.error(f"Failed to send email to {to_email}: {CustomException(e, sys)}")
-        raise EmailAPIError(f"Email sending failed: {e}", sys)
+        logger.error(f"Failed to build email to {to_email}: {CustomException(e, sys)}")
+        logger.warning(f"Email failed to send, but proceeding anyway.")
+        return False

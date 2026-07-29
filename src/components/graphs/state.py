@@ -11,8 +11,11 @@ class Candidate(TypedDict):
     decision: Optional[str] # "shortlist" or "reject"
     interview_slot: Optional[str]
     outcome: Optional[str] # "accept" or "reject"
+    invite_email_draft: Optional[str]
 
 class HireLoopState(TypedDict):
+    job_id: str
+    company_id: str
     status: str
     role: str
     experience: str
@@ -28,6 +31,8 @@ class HireLoopState(TypedDict):
     applications: List[Candidate]
     
     shortlist_approved: bool
+    
+    schedule_emails_approved: bool
     
     interviews_concluded: bool
     final_results_approved: bool

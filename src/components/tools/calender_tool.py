@@ -23,7 +23,7 @@ def find_available_slots() -> list[str]:
         logger.error(f"Failed to fetch slots: {CustomException(e, sys)}")
         raise CalendarAPIError(f"Failed to fetch slots: {e}", sys)
 
-def schedule_interview(candidate_email: str, slot: str) -> bool:
+def schedule_interview(candidate_email: str, slot: str, company_id: str) -> bool:
     """
     Schedule an interview event on Google Calendar.
     """

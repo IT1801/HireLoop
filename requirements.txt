@@ -19,3 +19,7 @@ pydantic-settings
 flask>=3.0.0
 requests>=2.31.0
 langsmith
+psycopg[binary]
+sqlalchemy
+langgraph-checkpoint-postgres
+passlib[bcrypt]

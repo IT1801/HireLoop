@@ -1,17 +1,18 @@
-from langgraph.checkpoint.sqlite import SqliteSaver
-import sqlite3
+from langgraph.checkpoint.postgres import PostgresSaver
+from psycopg_pool import ConnectionPool
 from src.components.core.config import settings
+
+# Global connection pool for the checkpointer
+pool = ConnectionPool(
+    conninfo=settings.DATABASE_URL,
+    max_size=20,
+    kwargs={"autocommit": True}
+)
 
 def get_checkpointer():
     """
-    Returns a SqliteSaver checkpointer for persisting the graph state.
-    In a real production environment, you might use an AsyncPostgresSaver
-    or maintain a global connection pool.
+    Returns a PostgresSaver checkpointer for persisting the graph state.
     """
-    # Connect with check_same_thread=False since FastAPI might use different threads
-    conn = sqlite3.connect(settings.DB_PATH, check_same_thread=False)
-    
-    # We initialize the SqliteSaver using the connection
-    checkpointer = SqliteSaver(conn)
+    checkpointer = PostgresSaver(pool)
     checkpointer.setup()
     return checkpointer

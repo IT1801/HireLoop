@@ -52,6 +52,7 @@ def result_email(state: HireLoopState) -> HireLoopState:
     apps = state.get("applications", [])
     role = state.get("role", "Open Position")
     draft_outcomes = state.get("final_results_draft", {})
+    company_id = state.get("company_id")
     
     for app in apps:
         outcome = draft_outcomes.get(app["id"], "reject")
@@ -66,7 +67,7 @@ def result_email(state: HireLoopState) -> HireLoopState:
             body = get_reject_email(app["name"], role)
             subject = f"Update on your application for {role}"
             
-        send_email(app["email"], subject, body)
+        send_email(app["email"], subject, body, company_id)
         
     state["emails_sent"] = True
     state["status"] = "PIPELINE_COMPLETE"

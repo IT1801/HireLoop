@@ -3,57 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HireLoop HR Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>HireLoop - Company Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent body scroll, handle in flex */
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .job-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            transition: all 0.2s ease-in-out;
+        }
+        .job-card:hover {
+            border-color: #3b82f6;
+            transform: translateX(4px);
+        }
+        .input-field {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            color: #f8fafc;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.5);
+        }
+        
+        .status-badge {
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+        }
+        .status-initializing { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.5); }
+        .status-completed { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
+        .status-pending { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); }
+        
+        /* Modal */
+        #new-job-modal {
+            display: none;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(4px);
+        }
+        #new-job-modal.active {
+            display: flex;
+        }
+    </style>
 </head>
-<body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
+<body class="h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="glass-panel border-b border-gray-700 px-6 py-4 flex justify-between items-center z-10">
+        <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">HireLoop</h1>
+            <span class="text-xs text-gray-500 font-medium uppercase tracking-wider px-2 py-1 rounded bg-gray-800">Dashboard</span>
+        </div>
+        <div class="relative">
+            <button id="user-menu-btn" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors focus:outline-none">
+                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg border border-blue-400">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-xl py-1 bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-700 z-50">
+                <a href="{{ url_for('settings') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Settings</a>
+                <div class="border-t border-gray-700 my-1"></div>
+                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300">Log Out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Sidebar -->
+        <aside class="w-80 glass-panel flex flex-col h-full relative z-10 shadow-2xl">
+            <div class="p-6 border-b border-gray-700">
+                {% if has_auth_verified %}
+                <button onclick="document.getElementById('new-job-modal').classList.add('active')" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create New Job Posting
+                </button>
+                {% else %}
+                <button onclick="alert('Please go to Settings (Top Right Dropdown) and connect your Google and LinkedIn accounts before starting a pipeline.')" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2 opacity-60 cursor-not-allowed" style="background: #334155;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Create New Job Posting
+                </button>
+                {% endif %}
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-4 space-y-3">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 ml-2">Active & Completed Pipelines</h3>
+                
+                {% if not jobs %}
+                <div class="text-center py-10 px-4">
+                    <p class="text-gray-500 text-sm">No job postings yet. Click the button above to start hiring!</p>
+                </div>
+                {% else %}
+                    {% for job in jobs %}
+                    <div class="block job-card p-4 rounded-xl relative group">
+                        <a href="{{ url_for('dashboard', thread_id=job.id) }}" class="block cursor-pointer absolute inset-0 z-0"></a>
+                        <div class="flex justify-between items-start mb-2 relative z-10 pointer-events-none">
+                            <h4 class="font-semibold text-white truncate pr-2">{{ job.job_title }}</h4>
+                            <form action="{{ url_for('delete_job', job_id=job.id) }}" method="POST" class="pointer-events-auto" onsubmit="return confirm('Are you sure you want to delete this pipeline? This cannot be undone.');">
+                                <button type="submit" class="text-gray-500 hover:text-red-400 p-1 rounded-md transition-colors" title="Delete Pipeline">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 relative z-10 pointer-events-none">
+                            <span class="text-xs text-gray-400">{{ job.created_at[:10] }}</span>
+                            <span class="status-badge 
+                                {% if 'PENDING' in job.status %}status-pending
+                                {% elif job.status == 'INITIALIZING' %}status-initializing
+                                {% else %}status-completed{% endif %}">
+                                {{ job.status.replace('_', ' ') }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex items-center justify-center bg-gray-900 relative">
+            
+            <!-- Abstract background styling -->
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 top-1/4 left-1/4 animate-blob"></div>
+                <div class="absolute w-96 h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 bottom-1/4 right-1/4 animate-blob animation-delay-2000"></div>
+            </div>
+
+            <div class="text-center z-10 max-w-lg px-6">
+                <svg class="w-20 h-20 text-gray-700 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <h2 class="text-2xl font-bold text-gray-300 mb-3">Select a Job Posting</h2>
+                <p class="text-gray-500">Choose a pipeline from the sidebar to view the AI agent's progress, or create a new job posting to let HireLoop find your next candidate.</p>
+            </div>
+            
+        </main>
     </div>
 
-    <main class="dashboard">
-        <header>
-            <h1>HireLoop</h1>
-            <p>AI Recruitment Orchestrator</p>
-        </header>
-
-        <section class="card launch-card">
-            <h2>Start Hiring Pipeline</h2>
-            <p class="subtitle">Enter a role and the AI agent graph will handle the rest.</p>
+    <!-- Create New Job Modal -->
+    <div id="new-job-modal" class="fixed inset-0 z-50 items-center justify-center">
+        <div class="glass-panel p-8 max-w-lg w-full rounded-2xl relative border border-gray-600">
+            <button onclick="document.getElementById('new-job-modal').classList.remove('active')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
             
-            <form id="start-form" method="POST" action="{{ url_for('index') }}">
-                <div class="input-group">
-                    <label for="role">Job Role</label>
-                    <input type="text" id="role" name="role" placeholder="e.g. Senior Python Engineer" required autocomplete="off">
+            <h2 class="text-2xl font-bold mb-2">Initialize Hiring Pipeline</h2>
+            <p class="text-gray-400 mb-6 text-sm">Enter the core details and the AI orchestrator will handle the rest.</p>
+            
+            <form id="start-form" method="POST" action="{{ url_for('index') }}" class="space-y-4">
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-300 mb-1">Job Role</label>
+                    <input type="text" id="role" name="role" placeholder="e.g. Senior Python Engineer" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
                 </div>
-                <div class="input-group">
-                    <label for="experience">Experience Required</label>
-                    <input type="text" id="experience" name="experience" placeholder="e.g. 5+ years" required autocomplete="off">
+                <div>
+                    <label for="experience" class="block text-sm font-medium text-gray-300 mb-1">Experience Required</label>
+                    <input type="text" id="experience" name="experience" placeholder="e.g. 5+ years" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
                 </div>
-                <div class="input-group">
-                    <label for="salary">Salary Range</label>
-                    <input type="text" id="salary" name="salary" placeholder="e.g. $150k - $180k" required autocomplete="off">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="salary" class="block text-sm font-medium text-gray-300 mb-1">Salary Range</label>
+                        <input type="text" id="salary" name="salary" placeholder="e.g. $150k - $180k" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
+                    </div>
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                        <input type="text" id="location" name="location" placeholder="e.g. Remote, US" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location" name="location" placeholder="e.g. Remote, US" required autocomplete="off">
+                
+                <div class="pt-4">
+                    <button type="submit" id="start-btn" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg relative overflow-hidden">
+                        <span class="btn-text">Launch AI Agent Pipeline</span>
+                    </button>
                 </div>
-                <button type="submit" id="start-btn">
-                    <span class="btn-text">Initialize Graph</span>
-                    <span class="loader hidden"></span>
-                </button>
             </form>
-        </section>
-    </main>
+        </div>
+    </div>
+
     <script>
         document.getElementById('start-form').addEventListener('submit', function() {
-            document.querySelector('.btn-text').classList.add('hidden');
-            document.querySelector('.loader').classList.remove('hidden');
-            document.getElementById('start-btn').disabled = true;
+            const btn = document.getElementById('start-btn');
+            btn.querySelector('.btn-text').textContent = 'Initializing...';
+            btn.style.opacity = '0.7';
+            btn.style.pointerEvents = 'none';
+        });
+        
+        // Close modal on outside click
+        document.getElementById('new-job-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+
+        // User Dropdown toggle
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userDropdown = document.getElementById('user-dropdown');
+        userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => {
+            if (!userDropdown.classList.contains('hidden')) {
+                userDropdown.classList.add('hidden');
+            }
         });
     </script>
 </body>

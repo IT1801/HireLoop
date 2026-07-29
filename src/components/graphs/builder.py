@@ -6,7 +6,7 @@ from src.components.agents.job_poster import generate_post_node, approve_post_no
 from src.components.agents.application_collecter import application_collector
 from src.components.agents.resume_screener import resume_screener
 from src.components.agents.calender_checker import calendar_checker
-from src.components.agents.scheduler_email import scheduler_email
+from src.components.agents.scheduler_email import draft_schedule_emails, approve_schedule_emails, scheduler_email
 from src.components.agents.result_email import result_preparer, result_email
 from src.components.checkpointer.setup import get_checkpointer
 
@@ -25,6 +25,8 @@ def build_graph():
     workflow.add_node("application_collector", application_collector)
     workflow.add_node("resume_screener", resume_screener)
     workflow.add_node("calendar_checker", calendar_checker)
+    workflow.add_node("draft_schedule_emails", draft_schedule_emails)
+    workflow.add_node("approve_schedule_emails", approve_schedule_emails)
     workflow.add_node("scheduler_email", scheduler_email)
     workflow.add_node("result_preparer", result_preparer)
     workflow.add_node("result_email", result_email)
@@ -48,7 +50,9 @@ def build_graph():
     )
     
     workflow.add_edge("resume_screener", "calendar_checker")
-    workflow.add_edge("calendar_checker", "scheduler_email")
+    workflow.add_edge("calendar_checker", "draft_schedule_emails")
+    workflow.add_edge("draft_schedule_emails", "approve_schedule_emails")
+    workflow.add_edge("approve_schedule_emails", "scheduler_email")
     workflow.add_edge("scheduler_email", "result_preparer")
     workflow.add_edge("result_preparer", "result_email")
     workflow.add_edge("result_email", END)
