@@ -1,15 +1,36 @@
 # Environments and Secrets
 .env
 .venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Python-generated files
 __pycache__/
-*.py[oc]
-*.egg-info
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.so
 
 # Database
 hireloop.sqlite
 *.db
+*.sqlite3
 
 # Logs
-logs
+logs/
+*.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
