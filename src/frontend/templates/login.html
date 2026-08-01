@@ -1,77 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HireLoop - Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>HireLoop - Sign In</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Courier+Prime&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#86948a",
+                        "on-tertiary-fixed": "#002114",
+                        "on-tertiary": "#003825",
+                        "on-background": "#dfe3ea",
+                        "on-surface": "#dfe3ea",
+                        "on-secondary-container": "#00452e",
+                        "background": "#0f1419",
+                        "secondary-fixed": "#68fcbf",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#002113",
+                        "on-primary-fixed-variant": "#005236",
+                        "on-primary": "#003824",
+                        "inverse-primary": "#006c49",
+                        "tertiary": "#68dba9",
+                        "surface-dim": "#0f1419",
+                        "surface-bright": "#353a3f",
+                        "tertiary-container": "#3eb686",
+                        "surface-container-highest": "#31353b",
+                        "primary": "#4edea3",
+                        "inverse-on-surface": "#2c3137",
+                        "on-secondary-fixed": "#002114",
+                        "surface-container-high": "#262a30",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#171c21",
+                        "primary-container": "#10b981",
+                        "secondary-container": "#00bd85",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "primary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#6ffbbe",
+                        "on-primary-container": "#00422b",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0a0f14",
+                        "surface-container": "#1b2025",
+                        "on-surface-variant": "#bbcabf",
+                        "secondary-fixed-dim": "#45dfa4",
+                        "on-secondary": "#003825",
+                        "outline-variant": "#3c4a42",
+                        "tertiary-fixed": "#85f8c4",
+                        "surface-variant": "#31353b",
+                        "surface-tint": "#4edea3",
+                        "on-tertiary-container": "#00422c",
+                        "secondary": "#45dfa4",
+                        "surface": "#0f1419",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "on-secondary-fixed-variant": "#005137",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#dfe3ea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "mono-label": ["Courier Prime"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "mono-label": ["14px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.surface');
+            color: theme('colors.on-surface');
+            background-image: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 60%);
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            flex-direction: column;
+            overflow-x: hidden;
         }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-radius: 1rem;
+
+        .glass-card {
+            background: rgba(12, 18, 26, 0.6);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.05);
+            position: relative;
         }
-        .input-field {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            color: #f8fafc;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(to bottom, rgba(16,185,129,0.3), transparent);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.5;
         }
-        .input-field:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-            outline: none;
+
+        .input-glow:focus-within {
+            border-color: theme('colors.primary');
+            box-shadow: 0 0 15px rgba(78, 222, 163, 0.2) inset, 0 0 10px rgba(78, 222, 163, 0.2);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.5);
+
+        .scanline-bg {
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%);
+            background-size: 100% 4px;
         }
     </style>
 </head>
-<body>
-
-    <div class="glass-panel p-10 max-w-md w-full text-center">
-        <h1 class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 mb-2">HireLoop</h1>
-        <p class="text-gray-400 mb-8">Sign in to your company dashboard</p>
-        
-        {% if error %}
-        <div class="bg-red-500 bg-opacity-20 border border-red-500 text-red-300 px-4 py-3 rounded relative mb-6 text-sm">
-            {{ error }}
-        </div>
-        {% endif %}
-
-        <form method="POST" action="{{ url_for('login') }}" class="text-left">
-            <div class="mb-5">
-                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-                <input type="email" id="email" name="email" required class="input-field w-full px-4 py-3 rounded-lg" placeholder="admin@acme.com">
-            </div>
+<body class="antialiased scanline-bg flex items-center justify-center relative p-margin-mobile md:p-margin-desktop" style="background-color: rgb(15, 20, 25); background-image: radial-gradient(circle at 50% -20%, rgba(16, 185, 129, 0.15), transparent 60%);">
+<!-- Ambient Glow Background -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full "></div>
+<div class="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-secondary/5 rounded-full "></div>
+</div>
+<!-- Login Container -->
+<main class="w-full max-w-[420px] relative z-10">
+<!-- Brand Header -->
+<div class="text-center mb-8">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tighter flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-4xl" data-icon="all_inclusive" style="font-variation-settings: 'FILL' 1;">all_inclusive</span>
+                HireLoop
+            </h1>
+<p class="font-mono-label text-mono-label text-on-surface-variant mt-2 uppercase tracking-[0.3em] opacity-80">AI Command Center</p>
+</div>
+<!-- Login Card -->
+<div class="glass-card rounded-xl p-8 shadow-2xl" style="background: rgba(15, 20, 25, 0.7); backdrop-filter: blur(4px); border: 1px solid rgba(78, 222, 163, 0.2);">
+<form class="flex flex-col gap-6" method="POST" action="{{ url_for('login') }}">
+{% if error %}
+<div class="bg-error-container border border-error text-error px-4 py-3 rounded font-body-sm">
+    {{ error }}
+</div>
+{% endif %}
+<div class="space-y-4">
+<!-- Email Field -->
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-2 ml-1" for="email">WORK EMAIL</label>
+<div class="relative input-glow transition-all duration-300 rounded border border-outline-variant overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="mail">mail</span>
+</div>
+<input class="w-full bg-transparent font-mono-label text-mono-label text-on-surface py-3 pl-10 pr-4 focus:outline-none focus:ring-0 border-none placeholder-outline-variant/50" id="email" name="email" placeholder="commander@hireloop.io" required="" type="email">
+<div class="absolute bottom-0 left-0 h-[1px] w-0 bg-primary transition-all duration-500 ease-out"></div>
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex justify-between items-center mb-2 ml-1">
+<label class="block font-label-caps text-label-caps text-on-surface-variant" for="password">SECURITY CLEARANCE</label>
+<a class="font-label-caps text-label-caps text-primary hover:text-secondary transition-colors" href="#">FORGOT KEY?</a>
+</div>
+<div class="relative input-glow transition-all duration-300 rounded border border-outline-variant overflow-hidden bg-surface-container-lowest">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline-variant text-sm" data-icon="key">key</span>
+</div>
+<input class="w-full bg-transparent font-mono-label text-mono-label text-on-surface py-3 pl-10 pr-4 focus:outline-none focus:ring-0 border-none placeholder-outline-variant/50" id="password" name="password" placeholder="••••••••" required="" type="password">
+<div class="absolute bottom-0 left-0 h-[1px] w-0 bg-primary transition-all duration-500 ease-out"></div>
+</div>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full mt-4 bg-primary-container hover:bg-secondary-container text-on-primary-container font-label-caps text-label-caps py-4 rounded relative overflow-hidden group transition-all duration-300 transform active:scale-[0.98]" type="submit" style="background: linear-gradient(135deg, rgb(16, 185, 129) 0%, rgb(78, 222, 163) 100%); color: rgb(0, 56, 36);">
+<span class="relative z-10 flex items-center justify-center gap-2">
+                        INITIALIZE SESSION
+                        <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+</span>
+<div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
+</button>
+<!-- SSO Options -->
+<div class="mt-2 text-center">
+<p class="font-label-caps text-label-caps text-outline-variant mb-4">OR AUTHENTICATE VIA</p>
+<div class="flex gap-4 justify-center">
+<button class="w-12 h-12 rounded border border-outline-variant hover:border-primary hover:bg-primary/10 flex items-center justify-center transition-all" type="button">
+<span class="material-symbols-outlined text-outline hover:text-primary transition-colors" data-icon="hub">hub</span>
+</button>
+<button class="w-12 h-12 rounded border border-outline-variant hover:border-primary hover:bg-primary/10 flex items-center justify-center transition-all" type="button">
+<span class="material-symbols-outlined text-outline hover:text-primary transition-colors" data-icon="fingerprint">fingerprint</span>
+</button>
+</div>
+</div>
+</form>
+</div>
+<!-- Footer Note -->
+<div class="mt-8 text-center">
+<p class="font-mono-label text-mono-label text-outline/60 flex items-center justify-center gap-2 text-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="shield">shield</span>
+                Secure Multi-Tenant B2B Platform v.2.4.1
+            </p>
+</div>
+</main>
+<script>
+        // Input animation script
+        document.querySelectorAll('input').forEach(input => {
+            const bottomLine = input.parentElement.querySelector('div.absolute.bottom-0');
             
-            <div class="mb-8">
-                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>
-                <input type="password" id="password" name="password" required class="input-field w-full px-4 py-3 rounded-lg" placeholder="••••••••">
-            </div>
+            input.addEventListener('focus', () => {
+                if(bottomLine) bottomLine.style.width = '100%';
+            });
             
-            <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg">Sign In</button>
-        </form>
-        
-        <p class="text-gray-500 text-xs mt-6">Secure Multi-Tenant B2B Platform</p>
-    </div>
+            input.addEventListener('blur', () => {
+                if(bottomLine) bottomLine.style.width = '0%';
+            });
+        });
+    </script>
 
-</body>
-</html>
+
+</body></html>

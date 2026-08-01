@@ -1,235 +1,610 @@
+{% if is_logged_in %}
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HireLoop - Company Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Prevent body scroll, handle in flex */
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLoop - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "inverse-primary": "#2e6a57",
+                        "on-background": "#dfe4df",
+                        "surface-dim": "#0f1419",
+                        "primary-fixed": "#a6f2d5",
+                        "primary-fixed-dim": "#8bd5ba",
+                        "on-surface-variant": "#bfc9c2",
+                        "secondary-fixed-dim": "#b6ccb9",
+                        "text-primary": "#f8fafc",
+                        "success": "#34d399",
+                        "on-error": "#690005",
+                        "tertiary-container": "#204e5d",
+                        "surface-variant": "#404944",
+                        "background": "#0f1419",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#002028",
+                        "surface-container-low": "#171c21",
+                        "tertiary-fixed": "#bee8fa",
+                        "on-tertiary": "#ffffff",
+                        "text-muted": "#94a3b8",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d2e8d4",
+                        "secondary-container": "#354b3b",
+                        "on-surface": "#dfe4df",
+                        "tertiary": "#a2cddd",
+                        "outline": "#89938d",
+                        "glass-border": "rgba(255, 255, 255, 0.05)",
+                        "slate-border": "#334155",
+                        "on-tertiary-fixed-variant": "#204e5d",
+                        "on-primary-fixed-variant": "#00513e",
+                        "on-primary-container": "#002117",
+                        "secondary": "#b6ccb9",
+                        "outline-variant": "#404944",
+                        "glass-bg": "rgba(15, 20, 25, 0.7)",
+                        "on-secondary-fixed": "#0b1f13",
+                        "on-primary-fixed": "#002117",
+                        "on-tertiary-container": "#bee8fa",
+                        "on-secondary-container": "#d2e8d4",
+                        "slate-surface": "#0f172a",
+                        "primary": "#8bd5ba",
+                        "surface-tint": "#8bd5ba",
+                        "slate-raised": "#1e293b",
+                        "surface-bright": "#353a3f",
+                        "tertiary-fixed-dim": "#a2cddd",
+                        "surface-container-lowest": "#0a0f14",
+                        "on-primary": "#003829",
+                        "inverse-surface": "#dfe4df",
+                        "surface-container-high": "#272c32",
+                        "surface": "#0f1419",
+                        "warning": "#fbbf24",
+                        "inverse-on-surface": "#2c3136",
+                        "surface-container-highest": "#32373d",
+                        "error": "#ffb4ab",
+                        "surface-container": "#1b2026",
+                        "primary-container": "#00513e",
+                        "on-secondary-fixed-variant": "#354b3b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "lg": "32px",
+                        "xl": "48px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["jetbrainsMono"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-lg": ["30px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
         }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&family=Plus+Jakarta+Sans:wght@600;700&display=swap');
+        
+        .glow-active {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+        
+        .ai-border-left {
+            border-left: 2px solid theme('colors.primary');
+        }
+        
         .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .job-card {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            transition: all 0.2s ease-in-out;
-        }
-        .job-card:hover {
-            border-color: #3b82f6;
-            transform: translateX(4px);
-        }
-        .input-field {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            color: #f8fafc;
-        }
-        .input-field:focus {
-            border-color: #3b82f6;
-            outline: none;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.5);
-        }
-        
-        .status-badge {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 0.05em;
-        }
-        .status-initializing { background-color: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.5); }
-        .status-completed { background-color: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
-        .status-pending { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.5); }
-        
-        /* Modal */
-        #new-job-modal {
-            display: none;
-            background: rgba(15, 23, 42, 0.8);
+            background-color: theme('colors.glass-bg');
             backdrop-filter: blur(4px);
-        }
-        #new-job-modal.active {
-            display: flex;
+            border: 1px solid theme('colors.glass-border');
         }
     </style>
 </head>
-<body class="h-screen flex flex-col">
+<body class="bg-background text-text-primary min-h-screen flex flex-col md:flex-row font-body-md relative overflow-hidden" x-data="{ showDeployModal: false }">
+<!-- Atmospheric Blobs -->
+<div class="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[radial-gradient(circle,rgba(4,120,87,0.15)_0%,transparent_70%)] rounded-full  pointer-events-none"></div>
+<div class="fixed bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-[radial-gradient(circle,rgba(5,150,105,0.15)_0%,transparent_70%)] rounded-full  pointer-events-none"></div>
+<!-- TopNavBar (Web & Mobile, Sticky) -->
+<nav class="bg-glass-bg backdrop-blur-md w-full top-0 sticky border-b border-glass-border shadow-[0_0_20px_rgba(16,185,129,0.15)] flex justify-between items-center px-md py-xs w-full z-50 md:hidden flex-col h-auto pt-sm">
+<div class="flex justify-between w-full items-center">
+<span class="font-headline-md text-headline-md font-bold text-primary">HireLoop</span>
+<div class="flex gap-sm text-text-muted items-center" x-data="{ profileOpen: false }">
+<div class="relative">
+<div @click="profileOpen = !profileOpen" class="w-8 h-8 rounded-full border border-glass-border ml-xs cursor-pointer bg-surface-variant flex items-center justify-center overflow-hidden hover:border-primary transition-colors">
+    <span class="material-symbols-outlined text-text-muted text-[20px]">person</span>
+</div>
+<div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl shadow-lg z-50 flex flex-col py-2" x-transition style="display: none;">
+    <a href="{{ url_for('settings') }}" class="px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">settings</span> Settings</a>
+    <a href="{{ url_for('logout') }}" class="px-4 py-2 hover:bg-error/10 hover:text-error transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">logout</span> Log Out</a>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Web Only) -->
+<aside class="bg-glass-bg backdrop-blur-xl h-screen w-64 left-0 sticky border-r border-glass-border hidden md:flex flex-col h-full p-sm gap-md z-40">
+<div class="flex items-center gap-xs mb-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">HireLoop</h1>
+<p class="font-label-sm text-label-sm text-text-muted">AI Recruiting</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs font-label-md text-label-md">
+<a class="flex items-center gap-sm px-sm py-xs rounded-r-lg bg-primary-container/20 text-primary border-l-4 border-primary group glow-active" href="/">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">dashboard</span>
+<span class="group-hover:translate-x-1 duration-200">Dashboard</span>
+</a>
 
-    <!-- Navbar -->
-    <nav class="glass-panel border-b border-gray-700 px-6 py-4 flex justify-between items-center z-10">
-        <div class="flex items-center gap-3">
-            <h1 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">HireLoop</h1>
-            <span class="text-xs text-gray-500 font-medium uppercase tracking-wider px-2 py-1 rounded bg-gray-800">Dashboard</span>
-        </div>
-        <div class="relative">
-            <button id="user-menu-btn" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors focus:outline-none">
-                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg border border-blue-400">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                </div>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            
-            <!-- Dropdown Menu -->
-            <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-md shadow-xl py-1 bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none border border-gray-700 z-50">
-                <a href="{{ url_for('settings') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">Settings</a>
-                <div class="border-t border-gray-700 my-1"></div>
-                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-700 hover:text-red-300">Log Out</a>
-            </div>
-        </div>
-    </nav>
+</nav>
+<button @click="showDeployModal = true" class="w-full bg-gradient-to-r from-inverse-primary to-primary text-text-primary font-label-md text-label-md py-sm rounded-lg hover:-translate-y-[2px] transition-transform shadow-[0_0_15px_rgba(16,185,129,0.3)] mb-md">
+            New Job Requisition
+        </button>
 
-    <!-- Main Layout -->
-    <div class="flex flex-1 overflow-hidden relative">
-        
-        <!-- Sidebar -->
-        <aside class="w-80 glass-panel flex flex-col h-full relative z-10 shadow-2xl">
-            <div class="p-6 border-b border-gray-700">
-                {% if has_auth_verified %}
-                <button onclick="document.getElementById('new-job-modal').classList.add('active')" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Create New Job Posting
-                </button>
-                {% else %}
-                <button onclick="alert('Please go to Settings (Top Right Dropdown) and connect your Google and LinkedIn accounts before starting a pipeline.')" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg flex items-center justify-center gap-2 opacity-60 cursor-not-allowed" style="background: #334155;">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Create New Job Posting
-                </button>
-                {% endif %}
-            </div>
-            
-            <div class="flex-1 overflow-y-auto p-4 space-y-3">
-                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 ml-2">Active & Completed Pipelines</h3>
-                
-                {% if not jobs %}
-                <div class="text-center py-10 px-4">
-                    <p class="text-gray-500 text-sm">No job postings yet. Click the button above to start hiring!</p>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 w-full">
+<!-- Top Nav (Desktop) -->
+<header class="bg-glass-bg backdrop-blur-md w-full top-0 sticky border-b border-glass-border shadow-[0_0_20px_rgba(16,185,129,0.15)] hidden md:flex justify-end items-center px-md py-xs w-full z-30">
+
+<div class="flex gap-sm text-text-muted items-center" x-data="{ profileOpen: false }">
+<span class="text-text-muted font-body-sm mr-2">{{ session.get('email', '') }}</span>
+<div class="relative">
+<div @click="profileOpen = !profileOpen" class="w-8 h-8 rounded-full border border-glass-border ml-xs cursor-pointer bg-surface-variant flex items-center justify-center overflow-hidden hover:border-primary transition-colors">
+    <span class="material-symbols-outlined text-text-muted text-[20px]">person</span>
+</div>
+<div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl shadow-lg z-50 flex flex-col py-2" x-transition style="display: none;">
+    <a href="{{ url_for('settings') }}" class="px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">settings</span> Settings</a>
+    <a href="{{ url_for('logout') }}" class="px-4 py-2 hover:bg-error/10 hover:text-error transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">logout</span> Log Out</a>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-sm md:p-md lg:p-lg layout-container">
+            <!-- ACTIVE PIPELINES SECTION -->
+            <section class="flex flex-col gap-6 w-full max-w-6xl mx-auto pt-md">
+                <div class="text-left mb-2">
+                    <h2 class="font-headline-lg text-headline-lg text-text-primary">Welcome Back, {{ session.get('name', session.get('email', '')).split(' ')[0].title() }}</h2>
                 </div>
-                {% else %}
+                {% if jobs %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
                     {% for job in jobs %}
-                    <div class="block job-card p-4 rounded-xl relative group">
-                        <a href="{{ url_for('dashboard', thread_id=job.id) }}" class="block cursor-pointer absolute inset-0 z-0"></a>
-                        <div class="flex justify-between items-start mb-2 relative z-10 pointer-events-none">
-                            <h4 class="font-semibold text-white truncate pr-2">{{ job.job_title }}</h4>
-                            <form action="{{ url_for('delete_job', job_id=job.id) }}" method="POST" class="pointer-events-auto" onsubmit="return confirm('Are you sure you want to delete this pipeline? This cannot be undone.');">
-                                <button type="submit" class="text-gray-500 hover:text-red-400 p-1 rounded-md transition-colors" title="Delete Pipeline">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </form>
-                        </div>
-                        <div class="flex justify-between items-center mt-3 relative z-10 pointer-events-none">
-                            <span class="text-xs text-gray-400">{{ job.created_at[:10] }}</span>
-                            <span class="status-badge 
-                                {% if 'PENDING' in job.status %}status-pending
-                                {% elif job.status == 'INITIALIZING' %}status-initializing
-                                {% else %}status-completed{% endif %}">
-                                {{ job.status.replace('_', ' ') }}
-                            </span>
-                        </div>
+                    <div class="relative group">
+                        <a href="{{ url_for('dashboard', thread_id=job.id) }}" class="glass-panel rounded-xl p-md transition-all hover:border-primary flex flex-col gap-4 relative overflow-hidden block h-full">
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="flex justify-between items-start relative z-10 pr-8">
+                                <h3 class="font-headline-md text-headline-md text-text-primary">{{ job.job_title }}</h3>
+                            </div>
+                            <div class="flex justify-between items-center mt-auto pt-4 border-t border-glass-border relative z-10">
+                                <span class="px-3 py-1 bg-primary/10 text-primary font-label-sm text-label-sm rounded-full border border-primary/20">
+                                    {{ job.status }}
+                                </span>
+                                <span class="font-label-sm text-label-sm text-text-muted">{{ job.created_at[:10] }}</span>
+                            </div>
+                        </a>
+                        <form action="{{ url_for('delete_job', job_id=job.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this recruitment process?');" class="absolute top-4 right-4 z-20">
+                            <button type="submit" class="text-text-muted hover:text-error transition-colors p-1 rounded hover:bg-error/10 opacity-0 group-hover:opacity-100">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                        </form>
                     </div>
                     {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-text-muted py-12 glass-panel rounded-xl">
+                    No active job recruitments found. Click "New Job Requisition" to get started.
+                </div>
                 {% endif %}
-            </div>
-        </aside>
+            </section>
+        </div> <!-- End of layout-container -->
 
-        <!-- Main Content Area -->
-        <main class="flex-1 flex items-center justify-center bg-gray-900 relative">
-            
-            <!-- Abstract background styling -->
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-10 top-1/4 left-1/4 animate-blob"></div>
-                <div class="absolute w-96 h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 bottom-1/4 right-1/4 animate-blob animation-delay-2000"></div>
-            </div>
-
-            <div class="text-center z-10 max-w-lg px-6">
-                <svg class="w-20 h-20 text-gray-700 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                <h2 class="text-2xl font-bold text-gray-300 mb-3">Select a Job Posting</h2>
-                <p class="text-gray-500">Choose a pipeline from the sidebar to view the AI agent's progress, or create a new job posting to let HireLoop find your next candidate.</p>
-            </div>
-            
-        </main>
-    </div>
-
-    <!-- Create New Job Modal -->
-    <div id="new-job-modal" class="fixed inset-0 z-50 items-center justify-center">
-        <div class="glass-panel p-8 max-w-lg w-full rounded-2xl relative border border-gray-600">
-            <button onclick="document.getElementById('new-job-modal').classList.remove('active')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-            
-            <h2 class="text-2xl font-bold mb-2">Initialize Hiring Pipeline</h2>
-            <p class="text-gray-400 mb-6 text-sm">Enter the core details and the AI orchestrator will handle the rest.</p>
-            
-            <form id="start-form" method="POST" action="{{ url_for('index') }}" class="space-y-4">
-                <div>
-                    <label for="role" class="block text-sm font-medium text-gray-300 mb-1">Job Role</label>
-                    <input type="text" id="role" name="role" placeholder="e.g. Senior Python Engineer" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
-                </div>
-                <div>
-                    <label for="experience" class="block text-sm font-medium text-gray-300 mb-1">Experience Required</label>
-                    <input type="text" id="experience" name="experience" placeholder="e.g. 5+ years" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
+        <!-- Deploy AI Agent Modal -->
+        <div x-show="showDeployModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4" x-transition.opacity style="display: none;">
+            <div @click.outside="showDeployModal = false" class="glass-panel w-full max-w-lg rounded-xl p-lg relative shadow-[0_0_50px_rgba(16,185,129,0.15)]">
+                <button type="button" @click="showDeployModal = false" class="absolute top-4 right-4 text-text-muted hover:text-primary">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <h2 class="font-headline-md text-headline-md text-text-primary mb-6">Initialize New Job Recruitment</h2>
+                <form action="/" method="POST" class="flex flex-col gap-4">
                     <div>
-                        <label for="salary" class="block text-sm font-medium text-gray-300 mb-1">Salary Range</label>
-                        <input type="text" id="salary" name="salary" placeholder="e.g. $150k - $180k" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
+                        <label class="block font-label-sm text-label-sm text-text-muted mb-2">Role Title</label>
+                        <input type="text" name="role" required class="w-full bg-surface-dim border border-slate-border rounded-lg p-3 text-text-primary focus:border-primary focus:outline-none transition-colors" placeholder="e.g., Senior Full Stack Engineer">
                     </div>
                     <div>
-                        <label for="location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
-                        <input type="text" id="location" name="location" placeholder="e.g. Remote, US" required autocomplete="off" class="input-field w-full px-4 py-3 rounded-lg">
+                        <label class="block font-label-sm text-label-sm text-text-muted mb-2">Experience Level</label>
+                        <input type="text" name="experience" required class="w-full bg-surface-dim border border-slate-border rounded-lg p-3 text-text-primary focus:border-primary focus:outline-none transition-colors" placeholder="e.g., 5+ years">
                     </div>
-                </div>
-                
-                <div class="pt-4">
-                    <button type="submit" id="start-btn" class="btn-primary w-full py-3 rounded-lg font-semibold shadow-lg relative overflow-hidden">
-                        <span class="btn-text">Launch AI Agent Pipeline</span>
+                    <div>
+                        <label class="block font-label-sm text-label-sm text-text-muted mb-2">Target Salary</label>
+                        <input type="text" name="salary" required class="w-full bg-surface-dim border border-slate-border rounded-lg p-3 text-text-primary focus:border-primary focus:outline-none transition-colors" placeholder="e.g., $150k - $180k">
+                    </div>
+                    <div>
+                        <label class="block font-label-sm text-label-sm text-text-muted mb-2">Location</label>
+                        <input type="text" name="location" required class="w-full bg-surface-dim border border-slate-border rounded-lg p-3 text-text-primary focus:border-primary focus:outline-none transition-colors" placeholder="e.g., Remote / San Francisco">
+                    </div>
+                    <button type="submit" class="mt-4 bg-gradient-to-r from-inverse-primary to-primary text-text-primary font-label-md text-label-md font-bold py-3 rounded-lg hover:-translate-y-[2px] transition-transform active:scale-95 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                        Deploy Agent
                     </button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-
-    <script>
-        document.getElementById('start-form').addEventListener('submit', function() {
-            const btn = document.getElementById('start-btn');
-            btn.querySelector('.btn-text').textContent = 'Initializing...';
-            btn.style.opacity = '0.7';
-            btn.style.pointerEvents = 'none';
-        });
-        
-        // Close modal on outside click
-        document.getElementById('new-job-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-            }
-        });
-
-        // User Dropdown toggle
-        const userMenuBtn = document.getElementById('user-menu-btn');
-        const userDropdown = document.getElementById('user-dropdown');
-        userMenuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userDropdown.classList.toggle('hidden');
-        });
-        document.addEventListener('click', () => {
-            if (!userDropdown.classList.contains('hidden')) {
-                userDropdown.classList.add('hidden');
-            }
-        });
-    </script>
+    </main>
 </body>
 </html>
+{% else %}
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLoop - Sovereign AI Recruitment Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#dfe3ea",
+                      "secondary-container": "#00bd85",
+                      "primary-fixed": "#6ffbbe",
+                      "inverse-surface": "#dfe3ea",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "primary": "#4edea3",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "on-primary": "#003824",
+                      "on-primary-container": "#00422b",
+                      "surface-container-highest": "#31353b",
+                      "tertiary-fixed": "#85f8c4",
+                      "surface-container-high": "#262a30",
+                      "error-container": "#93000a",
+                      "surface-container-low": "#171c21",
+                      "primary-fixed-dim": "#4edea3",
+                      "on-error": "#690005",
+                      "inverse-primary": "#006c49",
+                      "outline": "#86948a",
+                      "surface": "#0f1419",
+                      "surface-variant": "#31353b",
+                      "secondary-fixed": "#68fcbf",
+                      "surface-bright": "#353a3f",
+                      "on-tertiary-container": "#00422c",
+                      "secondary-fixed-dim": "#45dfa4",
+                      "on-secondary-fixed-variant": "#005137",
+                      "on-error-container": "#ffdad6",
+                      "error": "#ffb4ab",
+                      "on-secondary-container": "#00452e",
+                      "surface-dim": "#0f1419",
+                      "on-secondary": "#003825",
+                      "on-primary-fixed": "#002113",
+                      "tertiary": "#68dba9",
+                      "on-tertiary-fixed": "#002114",
+                      "background": "#0f1419",
+                      "surface-container": "#1b2025",
+                      "secondary": "#45dfa4",
+                      "on-surface-variant": "#bbcabf",
+                      "on-secondary-fixed": "#002114",
+                      "on-tertiary": "#003825",
+                      "inverse-on-surface": "#2c3137",
+                      "surface-tint": "#4edea3",
+                      "outline-variant": "#3c4a42",
+                      "primary-container": "#10b981",
+                      "on-surface": "#dfe3ea",
+                      "on-primary-fixed-variant": "#005236",
+                      "tertiary-container": "#3eb686",
+                      "surface-container-lowest": "#0a0f14"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "margin-desktop": "64px",
+                      "container-max": "1280px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "mono-label": [
+                              "Courier Prime"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "label-caps": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ]
+              },
+              "fontSize": {
+                      "mono-label": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #0f1419; /* surface */
+            color: #dfe3ea; /* on-surface */
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+        
+        .scanline-bg {
+            background-image: linear-gradient(to bottom, transparent 50%, rgba(16, 185, 129, 0.03) 50%);
+            background-size: 100% 4px;
+        }
+
+        .emerald-glow {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.25);
+        }
+
+        .pulse-dot {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(2.4); opacity: 0; }
+        }
+
+        .glass-card {
+            background: rgba(27, 32, 37, 0.9); /* surface-container with opacity */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+        }
+
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        
+        .btn-primary-glow:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased relative scanline-bg cyber-grid min-h-screen" x-data="{ showDeployModal: false }">
+<!-- TopNavBar -->
+<nav class="bg-surface/90 backdrop-blur-md w-full sticky top-0 z-50 border-b border-primary/30">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<div class="font-display-lg text-primary text-[32px] md:text-[48px] tracking-tighter">HireLoop</div>
+<div class="flex gap-4 items-center ml-auto">
+{% if False %}
+<div class="hidden md:flex items-center gap-2 text-on-surface-variant font-body-sm mr-2 border border-glass-border px-3 py-1.5 rounded-full bg-glass-bg backdrop-blur-md">
+    <span class="w-2 h-2 rounded-full bg-primary"></span>
+    {{ session.get('email', '') }}
+</div>
+<a href="{{ url_for('settings') }}" class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors hover:bg-primary/10 duration-300 px-3 py-2 rounded flex items-center gap-2">
+    <span class="material-symbols-outlined text-[20px]">settings</span>
+    Settings
+</a>
+<button @click="showDeployModal = true" class="bg-primary-container text-surface font-body-md text-body-md font-bold px-6 py-2 rounded hover:bg-primary transition-all active:scale-95 btn-primary-glow">Deploy AI</button>
+{% else %}
+<a href="{{ url_for('login') }}" class="font-body-md text-body-md text-primary border border-primary px-4 py-2 rounded hover:bg-primary/10 transition-colors">Login</a>
+{% endif %}
+</div>
+</div>
+</nav>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 flex flex-col gap-32">
+<!-- Hero Section -->
+<section class="relative flex flex-col items-center text-center gap-8 pt-10">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(6,78,59,0.15)_0%,transparent_70%)] rounded-full  -z-10"></div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/40 bg-primary/10 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+<span class="w-2 h-2 rounded-full bg-primary relative"><span class="absolute inset-0 rounded-full bg-primary pulse-dot"></span></span>
+<span class="font-label-caps text-label-caps text-primary tracking-widest">SYSTEM ONLINE</span>
+</div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface max-w-4xl drop-shadow-md">
+                The Sovereign AI Recruitment <br/><span class="text-primary" style="text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);">Command Center</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                Autonomous orchestration for high-growth talent teams. Deploy AI agents to source, screen, and schedule in seconds.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4 mt-4">
+{% if False %}
+<button @click="showDeployModal = true" class="bg-primary-container text-surface font-body-md text-body-md font-bold px-8 py-4 rounded hover:bg-primary transition-all active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)]">Deploy AI Agent</button>
+{% else %}
+<a href="{{ url_for('login') }}" class="bg-primary-container text-surface font-body-md text-body-md font-bold px-8 py-4 rounded hover:bg-primary transition-all active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] flex items-center justify-center">Login to Command Center</a>
+{% endif %}
+</div>
+</section>
+<!-- Active Pipelines Section -->
+{% if False %}
+<section class="flex flex-col gap-12 w-full max-w-5xl mx-auto mt-16">
+    <div class="text-center">
+        <h2 class="font-headline-md text-headline-md text-on-surface drop-shadow-sm">Active Job Recruitments</h2>
+        <div class="w-16 h-1 bg-primary mx-auto mt-4 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+    </div>
+    {% if jobs %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for job in jobs %}
+        <a href="{{ url_for('dashboard', thread_id=job.id) }}" class="glass-card rounded-lg p-6 transition-all group flex flex-col gap-4">
+            <div class="flex justify-between items-center">
+                <h3 class="font-body-lg text-body-lg text-on-surface font-bold">{{ job.job_title }}</h3>
+                <span class="px-3 py-1 bg-primary/20 text-primary font-label-caps text-label-caps rounded-full border border-primary/30">
+                    {{ job.status }}
+                </span>
+            </div>
+            <p class="font-mono-label text-mono-label text-on-surface-variant text-sm">Created: {{ job.created_at[:10] }}</p>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-on-surface-variant py-8 glass-card rounded-lg">
+        No active job recruitments found. Deploy one to get started.
+    </div>
+    {% endif %}
+</section>
+{% endif %}
+
+
+<!-- Deploy AI Agent Modal -->
+<div x-show="showDeployModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4" x-transition.opacity style="display: none;">
+    <div @click.outside="showDeployModal = false" class="glass-card w-full max-w-lg rounded-xl p-8 relative shadow-[0_0_50px_rgba(16,185,129,0.15)]">
+        <button type="button" @click="showDeployModal = false" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="font-headline-md text-headline-md text-on-surface mb-6">Initialize New Job Recruitment</h2>
+        <form action="/" method="POST" class="flex flex-col gap-4">
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Role Title</label>
+                <input type="text" name="role" required class="w-full bg-surface-container-low border border-primary/20 rounded p-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="e.g., Senior Full Stack Engineer">
+            </div>
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Experience Level</label>
+                <input type="text" name="experience" required class="w-full bg-surface-container-low border border-primary/20 rounded p-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="e.g., 5+ years">
+            </div>
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Target Salary</label>
+                <input type="text" name="salary" required class="w-full bg-surface-container-low border border-primary/20 rounded p-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="e.g., $150k - $180k">
+            </div>
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">Location</label>
+                <input type="text" name="location" required class="w-full bg-surface-container-low border border-primary/20 rounded p-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="e.g., Remote / San Francisco">
+            </div>
+            <button type="submit" class="mt-4 bg-primary-container text-surface font-body-md text-body-md font-bold py-4 rounded hover:bg-primary transition-all active:scale-95 btn-primary-glow">
+                Deploy Agent
+            </button>
+        </form>
+    </div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest w-full py-12 border-t border-primary/20 mt-20 relative z-10">
+<div class="max-w-container-max mx-auto px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="font-display-lg text-primary text-[24px]" style="text-shadow: 0 0 5px rgba(16, 185, 129, 0.3);">HireLoop</div>
+<ul class="flex flex-wrap gap-6 font-mono-label text-mono-label">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Protocol</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">API</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Security</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Terminal</a></li>
+</ul>
+<div class="font-mono-label text-mono-label text-on-surface-variant opacity-60">
+                © 2026 HireLoop AI. Digital Sovereignty Guaranteed.
+            </div>
+</div>
+</footer>
+</body></html>
+{% endif %}

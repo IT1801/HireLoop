@@ -28,7 +28,7 @@ def generate_post_node(state: HireLoopState) -> HireLoopState:
         
         Keep it concise, use relevant hashtags, and encourage people to apply.
         CRITICAL: You MUST include this exact application link at the bottom of the post: 
-        http://localhost:5000/apply/{state.get('job_id', 'unknown')}
+        http://localhost:5001/apply/{state.get('job_id', 'unknown')}
         
         Output ONLY the text of the post without markdown blocks."""
         

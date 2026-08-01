@@ -12,7 +12,7 @@ from langgraph.types import Command
 
 app = FastAPI(title="HireLoop Orchestrator API")
 
-# No static files mounted on backend, use the Flask app on port 5000
+# No static files mounted on backend, use the Flask app on port 5001
 
 graph = build_graph()
 
@@ -33,7 +33,7 @@ class ResumeRequest(BaseModel):
 
 @app.get("/")
 def health_check():
-    return {"status": "HireLoop Backend is running. Please access the UI on port 5000."}
+    return {"status": "HireLoop Backend is running. Please access the UI on port 5001."}
 
 import re
 from pydantic import BaseModel, field_validator
@@ -89,10 +89,44 @@ def login(req: LoginRequest):
             "status": "success",
             "user_id": user.id,
             "company_id": user.company_id,
-            "role": user.role
+            "role": user.role,
+            "name": user.name,
+            "phone": user.phone,
+            "setup_complete": user.setup_complete
         }
     finally:
         db.close()
+
+class SetupRequest(BaseModel):
+    user_id: str
+    name: str
+    phone: str
+    company_name: Optional[str] = None
+    
+@app.post("/api/user/setup")
+def setup_user(req: SetupRequest):
+    from src.components.core.tenant_db import SessionLocal, User, Company
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.id == req.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user.name = req.name
+        user.phone = req.phone
+        user.setup_complete = True
+
+        if req.company_name:
+            company = db.query(Company).filter(Company.id == user.company_id).first()
+            if company:
+                company.name = req.company_name
+        
+        db.commit()
+        
+        return {"status": "success", "message": "Setup completed successfully"}
+    finally:
+        db.close()
+
 
 @app.post("/start")
 def start_pipeline(req: StartRequest):
@@ -190,27 +224,40 @@ class SettingsRequest(BaseModel):
     linkedin_org_id: str = None
     linkedin_access_token: str = None
     google_credentials: str = None
+    user_id: str = None
+    name: str = None
+    phone: str = None
 
 @app.get("/api/settings/{company_id}")
-def get_settings(company_id: str):
-    from src.components.core.tenant_db import SessionLocal, Company
+def get_settings(company_id: str, user_id: str = None):
+    from src.components.core.tenant_db import SessionLocal, Company, User
     db = SessionLocal()
     try:
         company = db.query(Company).filter(Company.id == company_id).first()
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
+            
+        user_name = ""
+        user_phone = ""
+        if user_id:
+            user = db.query(User).filter(User.id == user_id).first()
+            if user:
+                user_name = user.name or ""
+                user_phone = user.phone or ""
         
         return {
             "status": "success",
             "has_linkedin": bool(company.linkedin_access_token),
-            "has_google": bool(company.google_credentials)
+            "has_google": bool(company.google_credentials),
+            "name": user_name,
+            "phone": user_phone
         }
     finally:
         db.close()
 
 @app.post("/api/settings/{company_id}")
 def update_settings(company_id: str, req: SettingsRequest):
-    from src.components.core.tenant_db import SessionLocal, Company
+    from src.components.core.tenant_db import SessionLocal, Company, User
     db = SessionLocal()
     try:
         company = db.query(Company).filter(Company.id == company_id).first()
@@ -224,6 +271,14 @@ def update_settings(company_id: str, req: SettingsRequest):
         if req.google_credentials is not None:
             company.google_credentials = req.google_credentials
             
+        if req.user_id:
+            user = db.query(User).filter(User.id == req.user_id).first()
+            if user:
+                if req.name is not None:
+                    user.name = req.name
+                if req.phone is not None:
+                    user.phone = req.phone
+                    
         db.commit()
         return {"status": "success"}
     finally:
@@ -302,7 +357,7 @@ from fastapi.responses import RedirectResponse
 def google_login(company_id: str):
     client_id = settings.GOOGLE_CLIENT_ID
     if not client_id:
-        return RedirectResponse(url=f"http://127.0.0.1:5000/settings?error=Google+Client+ID+not+configured")
+        return RedirectResponse(url=f"http://127.0.0.1:5001/settings?error=Google+Client+ID+not+configured")
     
     redirect_uri = f"http://127.0.0.1:8000/auth/google/callback"
     state = company_id
@@ -337,7 +392,7 @@ def google_callback(code: str, state: str):
     resp = requests.post(token_url, data=data)
     if resp.status_code != 200:
         logger.error(f"Google OAuth Error: {resp.text}")
-        return RedirectResponse(url=f"http://127.0.0.1:5000/settings?error=Google+OAuth+Failed")
+        return RedirectResponse(url=f"http://127.0.0.1:5001/settings?error=Google+OAuth+Failed")
         
     tokens = resp.json()
     import json
@@ -352,13 +407,13 @@ def google_callback(code: str, state: str):
     finally:
         db.close()
         
-    return RedirectResponse(url=f"http://127.0.0.1:5000/settings?success=Google+Connected")
+    return RedirectResponse(url=f"http://127.0.0.1:5001/settings?success=Google+Connected")
 
 @app.get("/auth/linkedin/login")
 def linkedin_login(company_id: str):
     client_id = settings.LINKEDIN_CLIENT_ID
     if not client_id:
-        return RedirectResponse(url=f"http://127.0.0.1:5000/settings?error=LinkedIn+Client+ID+not+configured")
+        return RedirectResponse(url=f"http://127.0.0.1:5001/settings?error=LinkedIn+Client+ID+not+configured")
         
     redirect_uri = f"http://127.0.0.1:8000/auth/linkedin/callback"
     state = company_id
@@ -377,7 +432,7 @@ def linkedin_login(company_id: str):
 def linkedin_callback(state: str, code: Optional[str] = None, error: Optional[str] = None, error_description: Optional[str] = None):
     if error or not code:
         logger.error(f"LinkedIn OAuth Error: {error} - {error_description}")
-        return RedirectResponse(url=f"http://127.0.0.1:5000/settings?error=LinkedIn+OAuth+Failed")
+        return RedirectResponse(url=f"http://127.0.0.1:5001/settings?error=LinkedIn+OAuth+Failed")
 
     import requests
     company_id = state
@@ -396,7 +451,7 @@ def linkedin_callback(state: str, code: Optional[str] = None, error: Optional[st
     resp = requests.post(token_url, data=data, headers=headers)
     if resp.status_code != 200:
         logger.error(f"LinkedIn OAuth Error: {resp.text}")
-        return RedirectResponse(url=f"http://127.0.0.1:5000/settings?error=LinkedIn+OAuth+Failed")
+        return RedirectResponse(url=f"http://127.0.0.1:5001/settings?error=LinkedIn+OAuth+Failed")
         
     tokens = resp.json()
     
@@ -410,7 +465,7 @@ def linkedin_callback(state: str, code: Optional[str] = None, error: Optional[st
     finally:
         db.close()
         
-    return RedirectResponse(url=f"http://127.0.0.1:5000/settings?success=LinkedIn+Connected")
+    return RedirectResponse(url=f"http://127.0.0.1:5001/settings?success=LinkedIn+Connected")
 
 class ApplicationRequest(BaseModel):
     name: str

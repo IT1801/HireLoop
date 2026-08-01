@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey
+from sqlalchemy import create_engine, Column, String, Integer, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from datetime import datetime
 import os
@@ -34,6 +34,9 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
     role = Column(String, default="recruiter")
+    name = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    setup_complete = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     
     company = relationship("Company", back_populates="users")

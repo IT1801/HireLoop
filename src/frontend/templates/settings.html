@@ -1,123 +1,418 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - HireLoop</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLoop - Platform Settings</title>
+<!-- Material Symbols (Literal Transcription) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface": "#0f1419",
+                "surface-dim": "#0f1419",
+                "surface-bright": "#353a3f",
+                "surface-container-lowest": "#0a0f14",
+                "surface-container-low": "#171c21",
+                "surface-container": "#1b2025",
+                "surface-container-high": "#262b30",
+                "surface-container-highest": "#31353a",
+                "primary": "#10b981",
+                "primary-container": "#044e36",
+                "on-primary": "#ffffff",
+                "on-primary-container": "#8bf0c6",
+                "secondary": "#a7ccc0",
+                "secondary-container": "#274e44",
+                "on-secondary": "#11362d",
+                "on-secondary-container": "#c3e8dc",
+                "tertiary": "#a9c8f0",
+                "tertiary-container": "#2a4a6b",
+                "on-tertiary": "#103252",
+                "on-tertiary-container": "#c6e4ff",
+                "error": "#ffb4ab",
+                "error-container": "#93000a",
+                "on-error": "#690005",
+                "on-error-container": "#ffdad6",
+                "background": "#0f1419",
+                "on-background": "#e2e2e6",
+                "surface-variant": "#40484a",
+                "on-surface": "#e2e2e6",
+                "on-surface-variant": "#b8c0c2",
+                "outline": "#889092",
+                "outline-variant": "#40484a",
+                "inverse-surface": "#e2e2e6",
+                "inverse-on-surface": "#2c3135",
+                "inverse-primary": "#10b981",
+                "glass-bg": "rgba(27, 32, 37, 0.7)",
+                "glass-border": "rgba(255, 255, 255, 0.1)",
+                "slate-border": "#40484a",
+                "slate-surface": "#1b2025",
+                "slate-raised": "#262b30",
+                "text-primary": "#e2e2e6",
+                "text-muted": "#b8c0c2",
+                "success": "#34d399",
+                "warning": "#fbbf24"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "16px",
+                    "lg": "32px",
+                    "xl": "48px",
+                    "base": "4px",
+                    "xs": "8px",
+                    "gutter": "24px",
+                    "md": "24px",
+                    "container-max": "1200px"
+            },
+            "fontFamily": {
+                    "mono-data": [
+                            "jetbrainsMono"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "headline-xl": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "mono-data": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "20px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-xl": [
+                            "40px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "30px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Inter', sans-serif;
+            background-color: #0f1419; /* Base level 0 as per Style Guidance */
+            color: #e2e2e6; /* text-primary */
         }
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        
+        /* Atmospheric Depth - Background Blobs */
+        .bg-blob-1 {
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 70vw;
+            height: 70vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.05) 0%, rgba(15,20,25,0) 70%);
+            z-index: -1;
+            pointer-events: none;
         }
-        .input-field {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            color: #f8fafc;
-            width: 100%;
+        
+        .bg-blob-2 {
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(167,204,192,0.03) 0%, rgba(15,20,25,0) 70%);
+            z-index: -1;
+            pointer-events: none;
         }
-        .input-field:focus {
-            border-color: #3b82f6;
+
+        /* Material Icons setup */
+        .material-symbols-outlined {
+          font-family: 'Material Symbols Outlined';
+          font-weight: normal;
+          font-style: normal;
+          font-size: 24px;
+          line-height: 1;
+          letter-spacing: normal;
+          text-transform: none;
+          display: inline-block;
+          white-space: nowrap;
+          word-wrap: normal;
+          direction: ltr;
+          -webkit-font-feature-settings: 'liga';
+          -webkit-font-smoothing: antialiased;
+        }
+
+        /* Glass Input focus ring */
+        .glass-input:focus {
             outline: none;
+            border-color: #10b981; /* primary */
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            transition: transform 0.2s, box-shadow 0.2s;
+        
+        /* AI Glow */
+        .ai-glow {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.5);
-        }
-        .badge-success { background-color: rgba(16, 185, 129, 0.2); color: #34d399; }
-        .badge-warning { background-color: rgba(245, 158, 11, 0.2); color: #fbbf24; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex text-text-primary overflow-x-hidden antialiased">
+<!-- Atmospheric Background -->
+<div class="bg-blob-1"></div>
+<div class="bg-blob-2"></div>
+<!-- Main Navigation Shell -->
+<!-- Nav elements suppressed as settings is a destination/transactional focus, but wait, usually settings is accessible. Following strictly: "Suppress FAB on Settings, Profile, Details..." and "Semantic Mapping (CRITICAL): You MUST accurately determine the active navigation tab..." 
+         Wait, "If designing a user settings page, "Profile" is active." (from instructions, but JSON has no Profile tab). 
+         JSON side nav tabs: ["Dashboard", "Job Recruitments", "Talent Pool", "Interviews", "Analytics"]. 
+         Settings doesn't map well to these, but usually it's reached via TopNav trailing icon. Let's include the shell to anchor the user, highlighting nothing on SideNav since it's Settings. 
+         Wait, the user is in "Platform settings for HireLoop". -->
 
-    <!-- Navbar -->
-    <nav class="glass-panel px-6 py-4 flex justify-between items-center z-10 sticky top-0 border-b border-gray-700">
-        <div class="flex items-center gap-3">
-            <h1 class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400">HireLoop</h1>
-            <span class="text-xs text-gray-500 font-medium uppercase tracking-wider px-2 py-1 rounded bg-gray-800">Settings</span>
-        </div>
-        <div class="flex items-center gap-4">
-            <a href="{{ url_for('index') }}" class="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">&larr; Back to Dashboard</a>
-        </div>
-    </nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Settings is usually here or contextualized) -->
+<header class="w-full top-0 sticky bg-glass-bg backdrop-blur-md border-b border-glass-border shadow-[0_0_20px_rgba(16,185,129,0.05)] flex justify-between items-center px-md py-xs z-30">
+<!-- Mobile Brand (hidden md) -->
+<div class="flex items-center gap-2 md:hidden">
+<span class="material-symbols-outlined text-primary">smart_toy</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">HireLoop</span>
+</div>
+<!-- Breadcrumbs / Title Context (Desktop) -->
+<div class="hidden md:flex items-center gap-4">
+<a href="/" class="text-text-muted hover:text-primary transition-colors flex items-center gap-2 bg-surface-container-high px-3 py-1.5 rounded-full border border-glass-border hover:border-primary/50">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="font-label-md">Dashboard</span>
+</a>
+<h2 class="font-headline-md text-headline-md font-bold text-primary border-l border-glass-border pl-4">Platform Settings</h2>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-4" x-data="{ profileOpen: false }">
+<button class="text-text-muted hover:text-secondary transition-colors hover:scale-[1.02] active:scale-[0.98]">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="relative">
+<div @click="profileOpen = !profileOpen" class="h-8 w-8 rounded-full border border-glass-border cursor-pointer bg-surface-variant flex items-center justify-center overflow-hidden hover:border-primary transition-colors shrink-0">
+    <span class="material-symbols-outlined text-text-muted text-[20px]">person</span>
+</div>
+<div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl shadow-lg z-50 flex flex-col py-2" x-transition style="display: none;">
+    <a href="{{ url_for('settings') }}" class="px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">settings</span> Settings</a>
+    <a href="{{ url_for('logout') }}" class="px-4 py-2 hover:bg-error/10 hover:text-error transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">logout</span> Log Out</a>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-4 md:p-lg overflow-y-auto w-full max-w-[900px] mx-auto">
+<div class="mb-lg">
+<h1 class="font-headline-xl text-headline-xl text-text-primary mb-2 hidden md:block">Settings &amp; Integrations</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-text-primary mb-2 md:hidden">Settings</h1>
+<p class="font-body-md text-body-md text-text-muted">Manage your personal information and connected services.</p>
+</div>
 
-    <main class="flex-1 max-w-3xl w-full mx-auto p-8 relative z-10 mt-6">
-        
-        <div class="mb-10">
-            <h2 class="text-3xl font-bold mb-2">Platform Settings</h2>
-            <p class="text-gray-400">Manage your integrations and API keys for autonomous orchestration.</p>
-        </div>
-
-        {% if success %}
-        <div class="mb-6 p-4 rounded-lg bg-green-900 border border-green-500 text-green-400 font-medium bg-opacity-30 border-opacity-50">
-            {{ success }}
-        </div>
-        {% endif %}
-        {% if error %}
-        <div class="mb-6 p-4 rounded-lg bg-red-900 border border-red-500 text-red-400 font-medium bg-opacity-30 border-opacity-50">
-            {{ error }}
-        </div>
-        {% endif %}
-
-            <!-- Google Integration -->
-            <section class="glass-panel p-6 rounded-2xl">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h3 class="text-xl font-semibold text-white flex items-center gap-2">
-                            <svg class="w-6 h-6 text-red-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>
-                            Google Workspace
-                        </h3>
-                        <p class="text-sm text-gray-400 mt-1">Connect your Google Workspace for sending candidate emails and calendar invites.</p>
+<!-- Personal Information Form -->
+<form method="POST" action="{{ url_for('settings') }}" class="mb-lg">
+    <div class="bg-glass-bg backdrop-blur-[16px] rounded-xl border border-glass-border p-6 relative overflow-hidden">
+        <h3 class="font-headline-md text-headline-md text-text-primary mb-4">Personal Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2 ml-1" for="name">FULL NAME</label>
+                <div class="relative input-glow transition-all duration-300 rounded border border-outline-variant overflow-hidden bg-surface-container-lowest">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-outline-variant text-sm">person</span>
                     </div>
-                    {% if has_google %}
-                        <span class="badge-success px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Connected</span>
-                    {% else %}
-                        <span class="badge-warning px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Not Connected</span>
-                    {% endif %}
+                    <input class="w-full bg-transparent font-mono-label text-mono-label text-on-surface py-3 pl-10 pr-4 focus:outline-none focus:ring-0 border-none placeholder-outline-variant/50" id="name" name="name" placeholder="John Doe" type="text" value="{{ user_name }}">
+                    <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-primary transition-all duration-500 ease-out"></div>
                 </div>
-                <div class="border-t border-gray-700 pt-4 mt-4">
-                    <a href="http://127.0.0.1:8000/auth/google/login?company_id={{ session.company_id }}" class="inline-flex items-center gap-2 bg-white text-gray-800 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition-colors">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        Sign in with Google
+            </div>
+            <div>
+                <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2 ml-1" for="phone">PHONE NUMBER</label>
+                <div class="relative input-glow transition-all duration-300 rounded border border-outline-variant overflow-hidden bg-surface-container-lowest">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-outline-variant text-sm">phone</span>
+                    </div>
+                    <input class="w-full bg-transparent font-mono-label text-mono-label text-on-surface py-3 pl-10 pr-4 focus:outline-none focus:ring-0 border-none placeholder-outline-variant/50" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="text" value="{{ user_phone }}">
+                    <div class="absolute bottom-0 left-0 h-[1px] w-0 bg-primary transition-all duration-500 ease-out"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end">
+            <button class="bg-primary-container hover:bg-secondary-container text-on-primary-container font-label-caps text-label-caps py-2 px-6 rounded relative overflow-hidden group transition-all duration-300 transform active:scale-[0.98]" type="submit" style="background: linear-gradient(135deg, rgb(16, 185, 129) 0%, rgb(78, 222, 163) 100%); color: rgb(0, 56, 36);">
+                SAVE CHANGES
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md">
+<!-- Google Workspace Card -->
+<div class="col-span-1 md:col-span-6 bg-glass-bg backdrop-blur-[16px] rounded-xl border border-glass-border p-sm relative group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-transparent to-surface-variant/20 group-hover:to-surface-variant/40 transition-colors pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-white flex items-center justify-center p-1">
+<!-- Minimal geometric G icon representation -->
+<svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.7 17.58V20.34H19.27C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"></path>
+<path d="M12 23C14.97 23 17.46 22.02 19.27 20.34L15.7 17.58C14.72 18.24 13.46 18.63 12 18.63C9.17 18.63 6.78 16.72 5.91 14.15H2.23V17.01C4.03 20.59 7.71 23 12 23Z" fill="#34A853"></path>
+<path d="M5.91 14.15C5.69 13.49 5.56 12.77 5.56 12C5.56 11.23 5.69 10.51 5.91 9.85V6.99H2.23C1.49 8.47 1.06 10.18 1.06 12C1.06 13.82 1.49 15.53 2.23 17.01L5.91 14.15Z" fill="#FBBC05"></path>
+<path d="M12 5.38C13.62 5.38 15.06 5.93 16.2 7.02L19.35 3.88C17.45 2.1 14.97 1 12 1C7.71 1 4.03 3.41 2.23 6.99L5.91 9.85C6.78 7.28 9.17 5.38 12 5.38Z" fill="#EA4335"></path>
+</svg>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-text-primary">Google Workspace</h3>
+<p class="font-body-sm text-body-sm text-text-muted">Calendar &amp; Email Sync</p>
+</div>
+</div>
+{% if has_google %}
+<span class="px-2 py-1 bg-success/20 text-success font-label-sm text-label-sm rounded-full border border-success/30 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+Connected
+</span>
+{% else %}
+<span class="px-2 py-1 bg-warning/20 text-warning font-label-sm text-label-sm rounded-full border border-warning/30 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span>
+Not Connected
+</span>
+{% endif %}
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg relative z-10">
+                        Automatically sync interviews to your calendar and capture email correspondence with candidates seamlessly.
+                    </p>
+<a href="/auth/google/login?company_id={{ session.get('company_id') }}" class="w-full py-2 px-4 bg-[rgba(255,255,255,0.05)] border border-glass-border hover:border-slate-border text-text-primary font-label-md text-label-md rounded-lg transition-all relative z-10 flex items-center justify-center gap-2 group-hover:bg-[rgba(255,255,255,0.1)]">
+<span class="material-symbols-outlined text-sm">settings</span>
+                        Manage Integration
                     </a>
-                </div>
-            </section>
-
-            <!-- LinkedIn Integration -->
-            <section class="glass-panel p-6 rounded-2xl">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h3 class="text-xl font-semibold text-white flex items-center gap-2">
-                            <svg class="w-6 h-6 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                            LinkedIn Recruiter
-                        </h3>
-                        <p class="text-sm text-gray-400 mt-1">Authorize HireLoop to post jobs and search candidates on your company page.</p>
-                    </div>
-                    {% if has_linkedin %}
-                        <span class="badge-success px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Connected</span>
-                    {% else %}
-                        <span class="badge-warning px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Not Connected</span>
-                    {% endif %}
-                </div>
-                <div class="border-t border-gray-700 pt-4 mt-4">
-                    <a href="http://127.0.0.1:8000/auth/linkedin/login?company_id={{ session.company_id }}" class="inline-flex items-center gap-2 bg-[#0077b5] text-white font-semibold px-6 py-3 rounded-lg shadow hover:bg-[#005582] transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+</div>
+<!-- LinkedIn Recruiter Card -->
+<div class="col-span-1 md:col-span-6 bg-glass-bg backdrop-blur-[16px] rounded-xl border border-glass-border p-sm relative group overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-transparent to-surface-variant/20 group-hover:to-surface-variant/40 transition-colors pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-[#0A66C2] flex items-center justify-center p-1 text-white font-bold text-xl">
+                                in
+                            </div>
+<div>
+<h3 class="font-headline-md text-headline-md text-text-primary">LinkedIn Recruiter</h3>
+<p class="font-body-sm text-body-sm text-text-muted">Sourcing &amp; InMail</p>
+</div>
+</div>
+{% if has_linkedin %}
+<span class="px-2 py-1 bg-success/20 text-success font-label-sm text-label-sm rounded-full border border-success/30 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+Connected
+</span>
+{% else %}
+<span class="px-2 py-1 bg-warning/20 text-warning font-label-sm text-label-sm rounded-full border border-warning/30 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span>
+Not Connected
+</span>
+{% endif %}
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-lg relative z-10">
+                        Connect to unlock direct sourcing, AI profile analysis, and automated InMail sequencing directly from HireLoop.
+                    </p>
+<a href="/auth/linkedin/login?company_id={{ session.get('company_id') }}" class="w-full py-2 px-4 bg-[#0A66C2] hover:bg-[#004182] text-white font-label-md text-label-md rounded-lg transition-all relative z-10 flex items-center justify-center gap-2 hover:-translate-y-[1px] shadow-lg">
+<span class="material-symbols-outlined text-sm">link</span>
                         Connect LinkedIn
                     </a>
-                </div>
-            </section>
-    </main>
-    
-</body>
-</html>
+</div>
+</div>
+<div class="h-24 w-full"></div> <!-- Bottom padding for scrolling -->
+</main>
+</div>
+</body></html>

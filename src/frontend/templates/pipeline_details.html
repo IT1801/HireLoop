@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HireLoop - Recruitment Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "inverse-primary": "#2e6a57",
+                        "on-background": "#dfe4df",
+                        "surface-dim": "#0f1419",
+                        "primary-fixed": "#a6f2d5",
+                        "primary-fixed-dim": "#8bd5ba",
+                        "on-surface-variant": "#bfc9c2",
+                        "secondary-fixed-dim": "#b6ccb9",
+                        "text-primary": "#f8fafc",
+                        "success": "#34d399",
+                        "on-error": "#690005",
+                        "tertiary-container": "#204e5d",
+                        "surface-variant": "#404944",
+                        "background": "#0f1419",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#002028",
+                        "surface-container-low": "#171c21",
+                        "tertiary-fixed": "#bee8fa",
+                        "on-tertiary": "#ffffff",
+                        "text-muted": "#94a3b8",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d2e8d4",
+                        "secondary-container": "#354b3b",
+                        "on-surface": "#dfe4df",
+                        "tertiary": "#a2cddd",
+                        "outline": "#89938d",
+                        "glass-border": "rgba(255, 255, 255, 0.05)",
+                        "slate-border": "#334155",
+                        "on-tertiary-fixed-variant": "#204e5d",
+                        "on-primary-fixed-variant": "#00513e",
+                        "on-primary-container": "#002117",
+                        "secondary": "#b6ccb9",
+                        "outline-variant": "#404944",
+                        "glass-bg": "rgba(15, 20, 25, 0.7)",
+                        "on-secondary-fixed": "#0b1f13",
+                        "on-primary-fixed": "#002117",
+                        "on-tertiary-container": "#bee8fa",
+                        "on-secondary-container": "#d2e8d4",
+                        "slate-surface": "#0f172a",
+                        "primary": "#8bd5ba",
+                        "surface-tint": "#8bd5ba",
+                        "slate-raised": "#1e293b",
+                        "surface-bright": "#353a3f",
+                        "tertiary-fixed-dim": "#a2cddd",
+                        "surface-container-lowest": "#0a0f14",
+                        "on-primary": "#003829",
+                        "inverse-surface": "#dfe4df",
+                        "surface-container-high": "#272c32",
+                        "surface": "#0f1419",
+                        "warning": "#fbbf24",
+                        "inverse-on-surface": "#2c3136",
+                        "surface-container-highest": "#32373d",
+                        "error": "#ffb4ab",
+                        "surface-container": "#1b2026",
+                        "primary-container": "#00513e",
+                        "on-secondary-fixed-variant": "#354b3b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "lg": "32px",
+                        "xl": "48px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["jetbrainsMono"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-lg": ["30px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400&family=Plus+Jakarta+Sans:wght@600;700&display=swap');
+        
+        .glow-active {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+        
+        .ai-border-left {
+            border-left: 2px solid theme('colors.primary');
+        }
+        
+        .glass-panel {
+            background-color: theme('colors.glass-bg');
+            backdrop-filter: blur(4px);
+            border: 1px solid theme('colors.glass-border');
+        }
+    </style>
+</head>
+<body class="bg-background text-text-primary min-h-screen flex font-body-md relative overflow-hidden" x-data="pipelineData()">
+<!-- Atmospheric Blobs -->
+<div class="fixed top-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-[radial-gradient(circle,rgba(4,120,87,0.15)_0%,transparent_70%)] rounded-full  pointer-events-none"></div>
+<div class="fixed bottom-[-20%] right-[-10%] w-[40vw] h-[40vw] bg-[radial-gradient(circle,rgba(5,150,105,0.15)_0%,transparent_70%)] rounded-full  pointer-events-none"></div>
+<!-- TopNavBar (Web & Mobile, Sticky) -->
+<nav class="bg-glass-bg backdrop-blur-md w-full top-0 sticky border-b border-glass-border shadow-[0_0_20px_rgba(16,185,129,0.15)] flex justify-between items-center px-md py-xs w-full z-50 md:hidden flex-col h-auto pt-sm">
+<div class="flex justify-between w-full items-center">
+<span class="font-headline-md text-headline-md font-bold text-primary">HireLoop</span>
+<div class="flex gap-sm text-text-muted items-center" x-data="{ profileOpen: false }">
+<div class="relative">
+<div @click="profileOpen = !profileOpen" class="w-8 h-8 rounded-full border border-glass-border ml-xs cursor-pointer bg-surface-variant flex items-center justify-center overflow-hidden hover:border-primary transition-colors">
+    <span class="material-symbols-outlined text-text-muted text-[20px]">person</span>
+</div>
+<div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl shadow-lg z-50 flex flex-col py-2" x-transition style="display: none;">
+    <a href="{{ url_for('settings') }}" class="px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">settings</span> Settings</a>
+    <a href="{{ url_for('logout') }}" class="px-4 py-2 hover:bg-error/10 hover:text-error transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">logout</span> Log Out</a>
+</div>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Web Only) -->
+<aside class="bg-glass-bg backdrop-blur-xl h-screen w-64 left-0 sticky border-r border-glass-border hidden md:flex flex-col h-full p-sm gap-md z-40">
+<div class="flex items-center gap-xs mb-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">HireLoop</h1>
+<p class="font-label-sm text-label-sm text-text-muted">AI Recruiting</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs font-label-md text-label-md">
+<a class="flex items-center gap-sm px-sm py-xs rounded-r-lg text-text-muted hover:bg-surface-variant/50 hover:text-primary transition-all group" href="/">
+<span class="material-symbols-outlined group-hover:translate-x-1 duration-200">dashboard</span>
+<span class="group-hover:translate-x-1 duration-200">Dashboard</span>
+</a>
+
+</nav>
+<button class="w-full bg-gradient-to-r from-inverse-primary to-primary text-text-primary font-label-md text-label-md py-sm rounded-lg hover:-translate-y-[2px] transition-transform shadow-[0_0_15px_rgba(16,185,129,0.3)] mb-md">
+            New Job Requisition
+        </button>
+
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10 w-full">
+<!-- Top Nav (Desktop) -->
+<header class="bg-glass-bg backdrop-blur-md w-full top-0 sticky border-b border-glass-border shadow-[0_0_20px_rgba(16,185,129,0.15)] hidden md:flex justify-end items-center px-md py-xs w-full z-30">
+
+<div class="flex gap-sm text-text-muted items-center" x-data="{ profileOpen: false }">
+<div class="relative">
+<div @click="profileOpen = !profileOpen" class="w-8 h-8 rounded-full border border-glass-border ml-xs cursor-pointer bg-surface-variant flex items-center justify-center overflow-hidden hover:border-primary transition-colors">
+    <span class="material-symbols-outlined text-text-muted text-[20px]">person</span>
+</div>
+<div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 w-48 bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl shadow-lg z-50 flex flex-col py-2" x-transition style="display: none;">
+    <a href="{{ url_for('settings') }}" class="px-4 py-2 hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">settings</span> Settings</a>
+    <a href="{{ url_for('logout') }}" class="px-4 py-2 hover:bg-error/10 hover:text-error transition-colors flex items-center gap-2 text-text-primary text-label-md font-label-md"><span class="material-symbols-outlined text-[18px]">logout</span> Log Out</a>
+</div>
+</div>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-sm md:p-md lg:p-lg layout-container">
+<!-- Process Timeline -->
+<section class="glass-panel rounded-xl p-md mb-lg">
+<h2 class="font-headline-md text-headline-md mb-md text-text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">route</span>
+                    Senior Full Stack Engineer - Recruitment
+                </h2>
+<div class="flex justify-between items-center relative w-full pt-sm overflow-x-auto pb-sm custom-scrollbar">
+
+<!-- Progress Line Background -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-slate-border -translate-y-1/2 z-0 hidden md:block"></div>
+<!-- Active Progress Line -->
+<div class="absolute top-1/2 left-0 h-[2px] bg-gradient-to-r from-inverse-primary to-primary -translate-y-1/2 z-0 hidden md:block glow-active" :style="`width: ${getProgressWidth()}%`"></div>
+<!-- Steps -->
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'init' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 0 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 0 ? 'check_circle' : 'flag'" style="font-variation-settings: 'FILL' 1;"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'init' ? 'text-primary font-bold' : 'text-text-muted'">Initialize</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'jd' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 1 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 1 ? 'check_circle' : 'description'" style="font-variation-settings: 'FILL' 1;"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'jd' ? 'text-primary font-bold' : 'text-text-muted'">JD Gen</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'post' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 2 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 2 ? 'check_circle' : 'edit_document'"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'post' ? 'text-primary font-bold' : 'text-text-muted'">LinkedIn</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'apps' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 3 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 3 ? 'check_circle' : 'group'"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'apps' ? 'text-primary font-bold' : 'text-text-muted'">Apps</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'screen' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 4 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 4 ? 'check_circle' : 'filter_alt'"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'screen' ? 'text-primary font-bold' : 'text-text-muted'">Screening</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'schedule' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 5 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 5 ? 'check_circle' : 'video_camera_front'"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'schedule' ? 'text-primary font-bold' : 'text-text-muted'">Interview</span>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-xs min-w-[80px]">
+<div :class="activeStep === 'decision' ? 'bg-glass-bg border-primary glow-active shadow-[0_0_15px_rgba(16,185,129,0.4)] text-primary' : (getStepIndex(activeStep) > 6 ? 'bg-surface-container-high border-primary text-primary' : 'bg-surface-dim border-slate-border text-text-muted')" class="w-8 h-8 rounded-full border-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" x-text="getStepIndex(activeStep) > 6 ? 'check_circle' : 'gavel'"></span>
+</div>
+<span class="font-label-sm text-label-sm" :class="activeStep === 'decision' ? 'text-primary font-bold' : 'text-text-muted'">Decision</span>
+</div>
+</div>
+</section>
+<!-- Split Pane Layout -->
+<div class="flex flex-col xl:flex-row gap-lg">
+
+<!-- Main Task Pane (AI Insight) -->
+<section class="flex-[2] glass-panel rounded-xl p-md flex flex-col relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-start mb-md relative z-10">
+<div>
+<h3 class="font-headline-md text-headline-md text-text-primary flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary animate-pulse" x-text="pendingAction ? 'smart_toy' : 'hourglass_top'"></span>
+                                <span x-text="statusTitle">Loading...</span>
+                            </h3>
+<p class="font-body-sm text-body-sm text-text-muted mt-base" x-text="statusSubtitle"></p>
+</div>
+<span class="px-3 py-1 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm border border-primary-container/30 backdrop-blur-sm" x-text="pendingAction ? 'Awaiting Action' : 'Processing'">
+                        </span>
+</div>
+    <template x-if="pendingAction === 'approve_jd' || pendingAction === 'approve_post'">
+        <div class="flex flex-col h-full">
+            <div class="flex justify-between items-center mb-4">
+                <h4 class="text-lg font-headline-md text-text-primary" x-text="pendingAction === 'approve_jd' ? 'Job Description' : 'LinkedIn Post'"></h4>
+                <button @click="isEditing = !isEditing" class="text-text-muted hover:text-primary transition-colors flex items-center gap-1 text-sm font-label-md border border-slate-border hover:border-primary px-3 py-1.5 rounded bg-surface-dim">
+                    <span class="material-symbols-outlined text-sm" x-text="isEditing ? 'visibility' : 'edit'"></span>
+                    <span x-text="isEditing ? 'Preview' : 'Edit'"></span>
+                </button>
+            </div>
+            
+            <div class="flex-1 bg-surface-container-low border border-primary/20 rounded-lg p-6 overflow-y-auto custom-scrollbar max-h-[500px]">
+                <template x-if="!isEditing">
+                    <div class="prose prose-invert prose-emerald max-w-none font-body-sm text-on-surface" x-html="window.marked ? window.marked.parse(draftText) : draftText"></div>
+                </template>
+                <template x-if="isEditing">
+                    <textarea x-model="draftText" class="w-full h-full min-h-[400px] bg-transparent border-0 focus:ring-0 text-on-surface font-mono text-sm leading-relaxed custom-scrollbar" placeholder="Edit the content here..."></textarea>
+                </template>
+            </div>
+        </div>
+    </template>
+    
+    <template x-if="pendingAction === 'approve_schedule_emails'">
+        <div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+            <template x-for="draft in actionData?.drafts || []" :key="draft.id">
+                <div class="bg-black/30 p-3 rounded border border-slate-border">
+                    <p class="font-bold text-primary mb-2" x-text="draft.name"></p>
+                    <textarea :id="'draft-' + draft.id" class="w-full bg-transparent border border-primary/20 rounded p-2 text-on-surface text-sm custom-scrollbar" rows="6" x-model="draft.draft"></textarea>
+                </div>
+            </template>
+        </div>
+    </template>
+
+    <template x-if="pendingAction === 'approve_results'">
+        <div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto custom-scrollbar">
+            <template x-for="c in statusValues?.applications || []" :key="c.id">
+                <div class="flex justify-between items-center bg-black/30 p-3 rounded border border-slate-border">
+                    <span class="font-bold text-text-primary" x-text="c.name"></span>
+                    <select x-model="finalOutcomes[c.id]" class="bg-surface border border-primary/30 rounded p-1 text-on-surface">
+                        <option value="accept">Offer</option>
+                        <option value="reject">Reject</option>
+                    </select>
+                </div>
+            </template>
+        </div>
+    </template>
+    
+    <template x-if="!pendingAction">
+        <div class="flex flex-col items-center justify-center p-8 gap-4 text-primary">
+            <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            <p>System is currently active and processing.</p>
+        </div>
+    </template>
+</div>
+<div class="flex justify-end gap-sm mt-md" x-show="pendingAction">
+                        <button @click="submitAction()" class="bg-primary hover:bg-primary-fixed-dim text-black font-label-md px-6 py-2 rounded transition-all shadow-[0_0_10px_rgba(16,185,129,0.2)] hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center gap-2" :disabled="loading">
+                            <span class="material-symbols-outlined text-sm" x-show="!loading && pendingAction !== 'wait_7_days'">check</span>
+                            <span class="material-symbols-outlined text-sm" x-show="!loading && pendingAction === 'wait_7_days'">fast_forward</span>
+                            <span class="material-symbols-outlined text-sm animate-spin" x-show="loading">progress_activity</span>
+                            <span x-text="loading ? 'Processing...' : (pendingAction === 'wait_7_days' ? 'Fast-Forward 7 Days' : 'Approve &amp; Proceed')"></span>
+                        </button>
+</div>
+</section>
+
+
+<!-- Sidebar (Applicant List) -->
+<aside class="flex-1 glass-panel rounded-xl p-md flex flex-col h-[600px]" x-show="getStepIndex(activeStep) >= getStepIndex('apps')">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-headline-md text-headline-md text-text-primary">Candidates</h3>
+<span class="font-label-sm text-label-sm text-text-muted bg-surface-dim px-2 py-1 rounded" x-text="((actionData?.shortlisted || []).length > 0 ? (actionData?.shortlisted || []).length : (statusValues?.applications || []).length) + ' Total'"></span>
+</div>
+<div class="flex flex-col gap-sm overflow-y-auto custom-scrollbar pr-xs">
+    
+    <template x-if="pendingAction === 'approve_shortlist'">
+        <template x-for="c in (actionData?.shortlisted || [])" :key="c.name">
+            <div class="bg-surface-container-low border border-slate-border rounded-lg p-sm hover:border-primary transition-colors cursor-pointer group">
+            <div class="flex justify-between items-start mb-xs">
+            <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-label-md text-text-primary border border-glass-border" x-text="c.name.substring(0,2).toUpperCase()"></div>
+            <div>
+            <h4 class="font-label-md text-label-md text-text-primary group-hover:text-primary transition-colors" x-text="c.name"></h4>
+            </div>
+            </div>
+            <div class="flex flex-col items-end">
+            <span class="font-mono-data text-mono-data text-primary font-bold" x-text="c.score + '/100'"></span>
+            <span class="font-label-sm text-label-sm text-text-muted text-[10px]">AI Score</span>
+            </div>
+            </div>
+            <div class="bg-primary-container/5 ai-border-left p-xs rounded-r text-body-sm font-body-sm text-on-surface-variant mt-xs text-[13px] leading-snug" x-text="'Interview Slot: ' + c.interview_slot">
+                                        </div>
+            </div>
+        </template>
+    </template>
+    
+    <template x-if="pendingAction !== 'approve_shortlist'">
+        <template x-for="c in (statusValues?.applications || [])" :key="c.id">
+            <div class="bg-surface-container-low border border-slate-border rounded-lg p-sm hover:border-primary transition-colors cursor-pointer group">
+            <div class="flex justify-between items-start mb-xs">
+            <div class="flex items-center gap-sm">
+            <div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-label-md text-text-primary border border-glass-border" x-text="c.name.substring(0,2).toUpperCase()"></div>
+            <div>
+            <h4 class="font-label-md text-label-md text-text-primary group-hover:text-primary transition-colors" x-text="c.name"></h4>
+            <p class="font-body-sm text-body-sm text-text-muted" x-text="c.email"></p>
+            </div>
+            </div>
+            <div class="flex flex-col items-end">
+            <span class="font-label-sm text-label-sm text-text-muted text-[10px]" x-text="c.status.toUpperCase()"></span>
+            </div>
+            </div>
+            </div>
+        </template>
+    </template>
+    
+    <template x-if="(!actionData?.shortlisted || actionData.shortlisted.length === 0) && (!statusValues?.applications || statusValues.applications.length === 0)">
+        <div class="text-center text-text-muted py-8">No candidates found yet.</div>
+    </template>
+
+</div>
+</aside>
+
+</div>
+</div>
+</main>
+<style>
+        /* Custom Scrollbar for inner elements */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.2);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.5);
+        }
+    </style>
+
+<script>
+    const THREAD_ID = "{{ thread_id }}";
+    function pipelineData() {
+        return {
+            statusTitle: 'Loading...',
+            statusSubtitle: 'Fetching latest recruitment data...',
+            activeStep: 'init',
+            pendingAction: null,
+            actionData: null,
+            statusValues: null,
+            loading: false,
+            
+            draftText: '',
+            finalOutcomes: {},
+            showModal: false,
+            isEditing: false,
+            
+            steps: ['init', 'jd', 'post', 'apps', 'screen', 'schedule', 'decision'],
+            getStepIndex(step) { return this.steps.indexOf(step); },
+            getProgressWidth() { return Math.max(0, (this.getStepIndex(this.activeStep) / (this.steps.length - 1)) * 100); },
+            
+            init() {
+                this.pollStatus();
+            },
+            
+            async pollStatus() {
+                try {
+                    const res = await fetch(`/api/status/${THREAD_ID}`);
+                    const data = await res.json();
+                    
+                    this.pendingAction = data.required_action;
+                    this.actionData = data.action_data;
+                    this.statusValues = data.values;
+                    
+                    let dbStatus = data.values && data.values.status ? data.values.status : 'PROCESSING';
+                    
+                    if (this.pendingAction === 'approve_jd') {
+                        this.statusTitle = "Action Required: Approve Job Description";
+                        this.statusSubtitle = "The AI has generated a Job Description. Edit it and approve to proceed.";
+                        this.activeStep = 'jd';
+                        let jdText = this.actionData.jd;
+                        if (Array.isArray(jdText)) jdText = jdText.map(b => b.text).join('\n');
+                        this.draftText = jdText || '';
+                    } else if (this.pendingAction === 'approve_post') {
+                        this.statusTitle = "Action Required: Approve LinkedIn Post";
+                        this.statusSubtitle = "The AI has drafted a LinkedIn post. Edit it and approve to proceed.";
+                        this.activeStep = 'post';
+                        let postText = this.actionData.post;
+                        if (Array.isArray(postText)) postText = postText.map(b => b.text).join('\n');
+                        this.draftText = postText || '';
+                    } else if (this.pendingAction === 'wait_7_days') {
+                        this.statusTitle = "Woohoo! Your post is live!";
+                        this.statusSubtitle = "Simulating waiting 7 days for candidates to apply... In the real world, the AI will poll your inbox, but here you can fast-forward time.";
+                        this.activeStep = 'apps';
+                    } else if (this.pendingAction === 'approve_shortlist') {
+                        this.statusTitle = "Action Required: Approve Shortlist";
+                        this.statusSubtitle = "The AI has screened the resumes and selected the top candidates. Approve to schedule interviews.";
+                        this.activeStep = 'screen';
+                    } else if (this.pendingAction === 'wait_interviews') {
+                        this.statusTitle = "Interviews are happening!";
+                        this.statusSubtitle = "Simulating the interview process...";
+                        this.activeStep = 'schedule';
+                        setTimeout(async () => {
+                            try {
+                                await fetch(`/api/resume/${THREAD_ID}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ action: 'wait_interviews', data: { waited: true } })
+                                });
+                            } catch(e) {}
+                            setTimeout(() => this.pollStatus(), 2000);
+                        }, 5000);
+                    } else if (this.pendingAction === 'approve_schedule_emails') {
+                        this.statusTitle = "Action Required: Approve Interview Invites";
+                        this.statusSubtitle = "The AI has drafted personalized invite emails. Edit them and approve to send.";
+                        this.activeStep = 'schedule';
+                    } else if (this.pendingAction === 'approve_results') {
+                        this.statusTitle = "Action Required: Approve Final Results";
+                        this.statusSubtitle = "Interviews are complete! The AI has drafted final offer/rejection decisions.";
+                        this.activeStep = 'decision';
+                        if (data.values && data.values.applications) {
+                            data.values.applications.forEach(c => {
+                                if (!(c.id in this.finalOutcomes)) {
+                                    this.finalOutcomes[c.id] = (this.actionData?.draft_outcomes || {})[c.id] || 'reject';
+                                }
+                            });
+                        }
+                    } else {
+                        this.statusTitle = `Status: ${dbStatus}`;
+                        this.statusSubtitle = "Recruitment is currently running...";
+                        if (dbStatus.includes('JD')) this.activeStep = 'jd';
+                        else if (dbStatus.includes('POST')) this.activeStep = 'post';
+                        else if (dbStatus.includes('COLLECT')) this.activeStep = 'apps';
+                        else if (dbStatus.includes('SCREEN') || dbStatus.includes('SHORTLIST') || dbStatus.includes('NO_SHORTLIST')) this.activeStep = 'screen';
+                        else if (dbStatus.includes('INTERVIEW') || dbStatus.includes('WAITING_FOR_INTERVIEWS')) this.activeStep = 'schedule';
+                        else if (dbStatus.includes('RESULT') || dbStatus.includes('PIPELINE_COMPLETE')) this.activeStep = 'decision';
+                        else this.activeStep = 'init';
+                        
+                        setTimeout(() => this.pollStatus(), 3000);
+                        return;
+                    }
+                } catch (err) {
+                    console.error(err);
+                    this.statusTitle = "Error fetching status";
+                    setTimeout(() => this.pollStatus(), 5000);
+                }
+            },
+            
+            async submitAction() {
+                this.loading = true;
+                let payload = {};
+                
+                if (this.pendingAction === 'approve_jd') {
+                    payload = { action: 'approve_jd', data: { jd_approved: true, jd: this.draftText } };
+                } else if (this.pendingAction === 'approve_post') {
+                    payload = { action: 'approve_post', data: { post_approved: true, post: this.draftText } };
+                } else if (this.pendingAction === 'approve_shortlist') {
+                    payload = { action: 'approve_shortlist', data: { shortlist_approved: true } };
+                } else if (this.pendingAction === 'approve_schedule_emails') {
+                    let drafts = this.actionData.drafts.map(d => ({
+                        id: d.id, name: d.name, draft: document.getElementById('draft-' + d.id).value
+                    }));
+                    payload = { action: 'approve_schedule_emails', data: { schedule_emails_approved: true, drafts: drafts } };
+                } else if (this.pendingAction === 'wait_7_days') {
+                    payload = { action: 'wait_7_days', data: { waited: true } };
+                } else if (this.pendingAction === 'approve_results') {
+                    payload = { action: 'approve_results', data: { final_results_approved: true, draft_outcomes: this.finalOutcomes } };
+                }
+                
+                try {
+                    await fetch(`/api/resume/${THREAD_ID}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    this.pendingAction = null;
+                    setTimeout(() => this.pollStatus(), 2000);
+                } catch (e) {
+                    alert('Error submitting action');
+                } finally {
+                    this.loading = false;
+                }
+            }
+        }
+    }
+</script>
+
+        }
+    }
+</script>
+
+</body>
+</html>

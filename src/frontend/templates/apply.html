@@ -1,138 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply for Job | HireLoop</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .apply-container {
-            max-width: 600px;
-            margin: 4rem auto;
-            padding: 2.5rem;
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Job Application - HireLoop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-tint": "#6ee7b7",
+                        "tertiary-fixed-dim": "#a7f3d0",
+                        "secondary-fixed": "#34d399",
+                        "on-secondary": "#022c22",
+                        "inverse-on-surface": "#1e293b",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "slate-border": "#334155",
+                        "primary-container": "#064e3b",
+                        "on-primary-fixed": "#064e3b",
+                        "on-error-container": "#ffdad6",
+                        "text-primary": "#f8fafc",
+                        "glass-bg": "rgba(15, 20, 25, 0.7)",
+                        "surface-bright": "#353a3f",
+                        "outline": "#94a3b8",
+                        "warning": "#fbbf24",
+                        "secondary": "#10b981",
+                        "background": "#0f1419",
+                        "inverse-primary": "#059669",
+                        "on-primary-container": "#a7f3d0",
+                        "on-surface-variant": "#cbd5e1",
+                        "glass-border": "rgba(255, 255, 255, 0.05)",
+                        "surface": "#0f1419",
+                        "on-secondary-container": "#064e3b",
+                        "primary": "#10b981",
+                        "on-tertiary-fixed": "#022c22",
+                        "surface-container-low": "#171c21",
+                        "surface-container-lowest": "#0a0f14",
+                        "on-secondary-fixed": "#022c22",
+                        "outline-variant": "#475569",
+                        "surface-container-high": "#272c31",
+                        "on-primary-fixed-variant": "#047857",
+                        "surface-container": "#1f2429",
+                        "on-tertiary": "#064e3b",
+                        "text-muted": "#94a3b8",
+                        "on-background": "#f1f5f9",
+                        "inverse-surface": "#f1f5f9",
+                        "tertiary": "#6ee7b7",
+                        "on-tertiary-container": "#022c22",
+                        "surface-container-highest": "#33383d",
+                        "success": "#34d399",
+                        "on-primary": "#022c22",
+                        "secondary-container": "#059669",
+                        "primary-fixed-dim": "#34d399",
+                        "on-secondary-fixed-variant": "#047857",
+                        "on-surface": "#f1f5f9",
+                        "surface-variant": "#1e293b",
+                        "slate-surface": "#0f172a",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#059669",
+                        "tertiary-container": "#047857",
+                        "tertiary-fixed": "#a7f3d0",
+                        "on-tertiary-fixed-variant": "#059669",
+                        "surface-dim": "#0f1419",
+                        "slate-raised": "#1e293b",
+                        "primary-fixed": "#6ee7b7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "lg": "32px",
+                        "container-max": "1200px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "xl": "48px",
+                        "sm": "16px"
+                    },
+                    "fontFamily": {
+                        "mono-data": ["JetBrains Mono"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "mono-data": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-lg": ["30px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
         }
-        .form-group {
-            margin-bottom: 1.5rem;
+    </script>
+<style>
+        body { background-color: #0f1419; }
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            /* filter: blur removed for performance */
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
         }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-subtle);
-            border-radius: 6px;
-            color: var(--text-primary);
-            font-family: inherit;
-        }
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-        }
-        .success-box {
-            display: none;
-            background: rgba(16, 185, 129, 0.2);
-            border: 1px solid #10b981;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 2rem;
-        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, #10b981 0%, transparent 70%); }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: radial-gradient(circle, #059669 0%, transparent 70%); }
+        
+        .ai-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.15); }
+        .btn-primary { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+<body class="text-text-primary font-body-md min-h-screen relative overflow-x-hidden selection:bg-primary-container selection:text-text-primary">
+<!-- Ambient Background Blobs -->
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<main class="w-full max-w-container-max mx-auto px-md md:px-lg py-xl">
+<!-- Hero Section -->
+<header class="mb-xl text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-lg relative">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container/10 to-transparent blur-3xl -z-10 rounded-full"></div>
+<div class="max-w-2xl">
+<span class="inline-block px-sm py-xs rounded-full bg-glass-bg border border-glass-border text-primary font-label-sm text-label-sm mb-sm ai-glow">
+                    Engineering Department
+                </span>
+<h1 class="font-headline-xl text-headline-xl text-text-primary mb-sm leading-tight">
+                    Join the future of <br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">StellarTech</span>
+</h1>
+<p class="font-body-lg text-body-lg text-text-muted">
+                    Senior AI Systems Engineer • Remote • Full-Time
+                </p>
+</div>
+<div class="hidden md:block w-32 h-32 rounded-xl border border-glass-border overflow-hidden ai-glow">
+<img class="w-full h-full object-cover" data-alt="A modern, high-tech corporate logo of a stylized star or tech node, illuminated against a deep dark background. Sleek geometric lines in bright cyan and indigo create a premium, AI-native aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvzZvlapWkwtZJZipYXjrjqd38phUKBIWRbMQZyG7ip9_s2vJgkr56xBJ5UpscqupWR5C0xQ5_KyycPbxL1PgQEmkrGFoXc_RJmUIOYB7m0ic0jmegfI8QjhBbo5Fyt7VmsatDUgnBxayeaKs1azvWthl5EmLvd4IqISUPJH0PIuoKHCY2rpNQt5mpPXGhimjazKzeHwRdYA5TFhZo_RN-BAAC2ucOpZaP_PCyr6IXgqGCR-gEDSsoDg"/>
+</div>
+</header>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg md:gap-xl">
+<!-- Left Column: Job Description -->
+<article class="lg:col-span-7 space-y-md">
+<section class="bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl p-lg ai-glow">
+<h2 class="font-headline-md text-headline-md text-text-primary mb-md flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">work</span>
+                        About the Role
+                    </h2>
+<div class="prose prose-invert prose-p:text-text-muted prose-p:font-body-md prose-p:mb-sm prose-li:text-text-muted prose-li:font-body-md max-w-none">
+<p>We are seeking a visionary Senior AI Systems Engineer to architect and build the next generation of our intelligent infrastructure. At StellarTech, we believe in building tools that augment human capabilities at scale.</p>
+<h3 class="font-headline-md text-headline-md text-text-primary mt-lg mb-sm">Key Responsibilities</h3>
+<ul class="list-none space-y-xs pl-0">
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Design, develop, and deploy scalable machine learning models into production environments.</span>
+</li>
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Collaborate with product teams to integrate LLMs into core enterprise workflows.</span>
+</li>
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Optimize inference latency and throughput for real-time AI applications.</span>
+</li>
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Mentor junior engineers and establish best practices for MLOps.</span>
+</li>
+</ul>
+<h3 class="font-headline-md text-headline-md text-text-primary mt-lg mb-sm">Requirements</h3>
+<ul class="list-none space-y-xs pl-0">
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>5+ years of software engineering experience, with at least 3 years focused on AI/ML systems.</span>
+</li>
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Deep expertise in Python, PyTorch, and deploying models using TensorRT or ONNX.</span>
+</li>
+<li class="flex items-start gap-xs">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check_circle</span>
+<span>Strong understanding of distributed systems and cloud infrastructure (AWS/GCP).</span>
+</li>
+</ul>
+</div>
+</section>
 
-    <main class="apply-container card">
-        <h1 style="text-align: center; margin-bottom: 0.5rem;">Join the Team</h1>
-        <p class="subtitle" style="text-align: center; margin-bottom: 2rem;">Please fill out the form below to submit your application.</p>
-        
-        <form id="apply-form">
-            <div class="form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" required placeholder="John Doe">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required placeholder="john@example.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="contact_number">Contact Number</label>
-                <input type="text" id="contact_number" name="contact_number" placeholder="+1 (555) 000-0000">
-            </div>
-            
-            <div class="form-group">
-                <label for="resume_text">Resume / Experience</label>
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Please paste your resume or describe your experience.</p>
-                <textarea id="resume_text" name="resume_text" rows="10" required placeholder="I am an experienced professional..."></textarea>
-            </div>
-            
-            <button type="submit" class="primary-btn" style="width: 100%; margin-top: 1rem; font-size: 1.1rem; padding: 1rem;" id="submit-btn">Submit Application</button>
-        </form>
-        
-        <div class="success-box" id="success-box">
-            <h2 style="color: #10b981; margin-bottom: 0.5rem;">Application Submitted!</h2>
-            <p>Thank you for applying. Our hiring team will review your application and get back to you shortly.</p>
-        </div>
-    </main>
-
-    <script>
-        const form = document.getElementById('apply-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const successBox = document.getElementById('success-box');
-        
-        // This comes from the Flask template
-        const jobId = "{{ job_id }}";
-        // Assuming backend is on port 8000
-        const BACKEND_URL = "http://127.0.0.1:8000";
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            
-            const payload = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                contact_number: document.getElementById('contact_number').value,
-                resume_text: document.getElementById('resume_text').value
-            };
-            
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/apply/${jobId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (res.ok) {
-                    form.style.display = 'none';
-                    successBox.style.display = 'block';
-                } else {
-                    alert('Error submitting application. Please try again.');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Submit Application';
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Network error. Please try again.');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Application';
-            }
-        });
-    </script>
-</body>
-</html>
+</article>
+<!-- Right Column: Fast-Apply Form -->
+<aside class="lg:col-span-5 sticky top-lg h-fit">
+<div class="bg-glass-bg backdrop-blur-xl border border-glass-border rounded-xl p-lg ai-glow relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-secondary opacity-50"></div>
+<h2 class="font-headline-md text-headline-md text-text-primary mb-xs">Fast-Apply</h2>
+<p class="font-body-sm text-body-sm text-text-muted mb-md">Complete your application in under 2 minutes.</p>
+{% if success %}
+<div class="bg-success/20 border border-success text-success px-4 py-3 rounded mb-4 font-body-sm">
+    {{ success }}
+</div>
+{% endif %}
+{% if error %}
+<div class="bg-error/20 border border-error text-error px-4 py-3 rounded mb-4 font-body-sm">
+    {{ error }}
+</div>
+{% endif %}
+<form action="/apply/{{ job_id }}" class="space-y-md" method="POST" enctype="multipart/form-data">
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-text-primary" for="fullName">Full Name</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted text-sm">person</span>
+</div>
+<input class="w-full pl-10 pr-4 py-2 bg-black/30 border border-slate-border rounded-lg text-text-primary font-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder-text-muted/50" id="fullName" name="fullName" placeholder="Jane Doe" required="" type="text"/>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-text-primary" for="email">Email Address</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted text-sm">mail</span>
+</div>
+<input class="w-full pl-10 pr-4 py-2 bg-black/30 border border-slate-border rounded-lg text-text-primary font-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder-text-muted/50" id="email" name="email" placeholder="jane@example.com" required="" type="email"/>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-text-primary" for="phone">Phone Number <span class="text-text-muted font-normal">(Optional)</span></label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted text-sm">phone</span>
+</div>
+<input class="w-full pl-10 pr-4 py-2 bg-black/30 border border-slate-border rounded-lg text-text-primary font-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder-text-muted/50" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-text-primary">Resume / Profile</label>
+<div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-border border-dashed rounded-lg hover:border-primary transition-colors group cursor-pointer bg-black/20">
+<div class="space-y-1 text-center">
+<span class="material-symbols-outlined text-text-muted text-3xl group-hover:text-primary transition-colors">cloud_upload</span>
+<div class="flex text-sm text-text-muted justify-center">
+<label class="relative cursor-pointer rounded-md font-label-md text-primary hover:text-primary-fixed focus-within:outline-none" for="file-upload">
+<span>Upload a file</span>
+<input class="sr-only" id="file-upload" name="file-upload" type="file"/>
+</label>
+<p class="pl-1 font-body-sm">or drag and drop</p>
+</div>
+<p class="text-xs text-text-muted/70 font-mono-data">PDF, DOCX up to 10MB</p>
+</div>
+</div>
+<div class="flex items-center justify-center gap-sm py-2">
+<div class="h-px bg-slate-border flex-1"></div>
+<span class="font-label-sm text-label-sm text-text-muted uppercase">or link</span>
+<div class="h-px bg-slate-border flex-1"></div>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted text-sm">link</span>
+</div>
+<input class="w-full pl-10 pr-4 py-2 bg-black/30 border border-slate-border rounded-lg text-text-primary font-body-md focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none placeholder-text-muted/50" id="linkedin" name="linkedin" placeholder="LinkedIn or Portfolio URL" type="url"/>
+</div>
+</div>
+<div class="pt-sm">
+<button class="w-full btn-primary text-text-primary font-label-md text-label-md py-3 px-4 rounded-lg flex items-center justify-center gap-xs transition-all duration-300" type="submit">
+                                Submit Application
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+<p class="text-center font-label-sm text-label-sm text-text-muted mt-3">
+                                By applying, you agree to our <a class="text-primary hover:underline" href="#">Privacy Policy</a>.
+                            </p>
+</div>
+</form>
+</div>
+</aside>
+</div>
+</main>
+<footer class="w-full border-t border-glass-border mt-xl py-lg bg-surface/50 backdrop-blur-md relative z-10">
+<div class="max-w-container-max mx-auto px-md text-center flex flex-col items-center justify-center gap-xs">
+<span class="font-label-sm text-label-sm text-text-muted tracking-widest uppercase">Powered By</span>
+<div class="flex items-center gap-2 group cursor-default">
+<span class="font-headline-md text-headline-md font-bold text-primary ai-glow group-hover:text-primary-fixed transition-colors duration-300">HireLoop</span>
+<span class="font-mono-data text-mono-data text-text-primary text-xs px-2 py-1 rounded bg-primary/20 border border-primary/30 group-hover:bg-primary/30 transition-colors">AI</span>
+</div>
+</div>
+</footer>
+</body></html>
